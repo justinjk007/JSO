@@ -1,27 +1,3 @@
-/*
-
-    These files are the code of "jSO" for Special Session & Competition on Real-Parameter Single
-   Objective Optimization at CEC-2017 (see [1])
-
-       [1] Janez Brest, Mirjam Sepesy Maucec, Borko Boskovic. Single Objective Real-Parameter
-   Optimization: Algorithm jSO, Proc. IEEE Congress on Evolutionary Computation (CEC-2017), Donostia
-   - San Sebastián, Spain, June 2017.
-
-   jSO is improved version of i-LSHADE.
-   iL-SHADE: Improved L-SHADE Algorithm (L-SHADE was proposed by Ryoji Tanabe and Alex Fukunaga at
-   CEC2014). Many thanks to Ryoji Tanabe and Alex Fukunaga for providing L-SHADE.
-
-*/
-
-/*
-  L-SHADE implemented by C++ for Special Session & Competition on Real-Parameter Single Objective
-  Optimization at CEC-2014
-
-
-  Version: 1.0   Date: 16/Apr/2014
-  Written by Ryoji Tanabe (rt.ryoji.tanabe [at] gmail.com)
-*/
-
 #include "de.h"
 
 Fitness LSHADE::run()
@@ -150,8 +126,9 @@ Fitness LSHADE::run()
                     pop_cr[target] = 0;
             }
             //   if (nfes< 0.25*max_num_evaluations && pop_cr[target] < 0.5) pop_cr[target] = 0.5;
-            //   // iL-SHADE if (nfes< 0.50*max_num_evaluations && pop_cr[target] < 0.25)
-            //   pop_cr[target] = 0.25;    // iL-SHADE
+            //   // iL-SHADE
+            //   if (nfes< 0.50*max_num_evaluations && pop_cr[target] < 0.25) pop_cr[target] = 0.25;
+            //   // iL-SHADE
             if (nfes < 0.25 * max_num_evaluations && pop_cr[target] < 0.7)
                 pop_cr[target] = 0.7;  // jSO
             if (nfes < 0.50 * max_num_evaluations && pop_cr[target] < 0.6)
@@ -164,8 +141,9 @@ Fitness LSHADE::run()
 
             if (pop_sf[target] > 1) pop_sf[target] = 1.0;
             //  if (nfes< 0.25*max_num_evaluations && pop_sf[target] > 0.8) pop_sf[target] = 0.8;
-            //  // iL-SHADE if (nfes< 0.50*max_num_evaluations && pop_sf[target] > 0.9)
-            //  pop_sf[target] = 0.9;    // iL-SHADE
+            //  // iL-SHADE
+            //  if (nfes< 0.50*max_num_evaluations && pop_sf[target] > 0.9) pop_sf[target] = 0.9;
+            //  // iL-SHADE
             if (nfes < 0.6 * max_num_evaluations && pop_sf[target] > 0.7)
                 pop_sf[target] = 0.7;  // jSO
 
@@ -190,13 +168,15 @@ Fitness LSHADE::run()
         /////////////////////////////////////////////////////////////////////////
         // update the bsf-solution and check the current number of fitness evaluations
         // if the current number of fitness evaluations over the max number of fitness evaluations,
-        // the search is terminated So, this program is unconcerned about L-SHADE algorithm directly
+        // the search is terminated
+        // So, this program is unconcerned about L-SHADE algorithm directly
         for (int i = 0; i < pop_size; i++) {
             nfes++;
 
             // following the rules of CEC 2014 real parameter competition,
             // if the gap between the error values of the best solution found and the optimal
-            // solution was 10^{−8} or smaller,  the error was treated as 0
+            // solution was 10^{−8} or smaller,
+            // the error was treated as 0
             if ((children_fitness[i] - optimum) < epsilon) children_fitness[i] = optimum;
 
             if (children_fitness[i] < bsf_fitness) {
@@ -322,8 +302,8 @@ Fitness LSHADE::run()
             // if (memory_cr[memory_pos] < 0) {
             //   cout << " nfes: " << nfes ;
             //   cout << " memory_sf[memory_pos] = "<< memory_sf[memory_pos] << "
-            //   memory_cr[memory_pos] = " << memory_cr[memory_pos]; cout << " old_sf = "<< old_sf
-            //   << " old_cr = " << old_cr<< endl;
+            //   memory_cr[memory_pos] = " << memory_cr[memory_pos];
+            //   cout << " old_sf = "<< old_sf << " old_cr = " << old_cr<< endl;
             //}
             // increment the counter
             memory_pos++;

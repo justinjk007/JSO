@@ -1,11 +1,3 @@
-/*
-  L-SHADE implemented by C++ for Special Session & Competition on Real-Parameter Single Objective
-  Optimization at CEC-2014
-
-  Version: 1.0   Date: 16/Apr/2014
-  Written by Ryoji Tanabe (rt.ryoji.tanabe [at] gmail.com)
-*/
-
 #ifndef _HEADER_H_
 #define _HEADER_H_
 
@@ -18,14 +10,17 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "CalculateGap.hpp"
 
 using namespace std;
+
+#define PI 3.14159265358979323846264338327950288
 
 typedef double variable;
 typedef variable* Individual;
 typedef double Fitness;
 
-extern int g_function_number;
+/* extern int g_function_number; */
 extern int g_problem_size;
 extern unsigned int g_max_num_evaluations;
 extern int function_name;
@@ -34,16 +29,20 @@ extern int g_pop_size;
 extern int g_memory_size;
 extern double g_p_best_rate;
 extern double g_arc_rate;
+extern double domain_max;
+extern double domain_min;
 
 extern ofstream outFile;
 
 // void cec14_test_func(double *, double *,int,int,int);
-void cec17_test_func(double*, double*, int, int, int);
+/* void cec17_test_func(double*, double*, int, int, int); */
 
 class searchAlgorithm
 {
    public:
     virtual Fitness run() = 0;
+    CalculateGap* fitness_algo_object;
+    long iteration_number = 0;  // Stores the number of iterations the algorithm has mutated too
 
    protected:
     void evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness);
@@ -67,7 +66,7 @@ class searchAlgorithm
     */
     inline double cauchy_g(double mu, double gamma)
     {
-        return mu + gamma * tan(M_PI * (randDouble() - 0.5));
+        return mu + gamma * tan(PI * (randDouble() - 0.5));
     }
 
     /*
@@ -76,7 +75,7 @@ class searchAlgorithm
     */
     inline double gauss(double mu, double sigma)
     {
-        return mu + sigma * sqrt(-2.0 * log(randDouble())) * sin(2.0 * M_PI * randDouble());
+        return mu + sigma * sqrt(-2.0 * log(randDouble())) * sin(2.0 * PI * randDouble());
     }
 
     // Recursive quick sort with index array
@@ -110,7 +109,7 @@ class searchAlgorithm
         if ((j + 1) < last) sortIndexWithQuickSort(array, j + 1, last, index);
     }
 
-    int function_number;
+    /* int function_number; */
     int problem_size;
     variable max_region;
     variable min_region;

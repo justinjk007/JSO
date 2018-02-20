@@ -2,7 +2,7 @@
 
 void searchAlgorithm::initializeParameters()
 {
-    function_number     = g_function_number;
+    // function_number     = g_function_number;
     problem_size        = g_problem_size;
     max_num_evaluations = g_max_num_evaluations;
     pop_size            = g_pop_size;
@@ -12,8 +12,14 @@ void searchAlgorithm::initializeParameters()
 void searchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness)
 {
     for (int i = 0; i < pop_size; i++) {
+        // NOTE: If you want to enable these also uncomment the
+        // cec17_test_func.cc file from the CMakeFile so it can be
+        // compiled.
+
         // cec14_test_func(pop[i],  &fitness[i], problem_size, 1, function_number);
-        cec17_test_func(pop[i], &fitness[i], problem_size, 1, function_number);
+        // cec17_test_func(pop[i], &fitness[i], problem_size, 1, function_number);
+        this->iteration_number++;
+        this->fitness_algo_object->getGap(pop[i], &fitness[i], this->iteration_number);
     }
 }
 
@@ -21,10 +27,10 @@ void searchAlgorithm::initializeFitnessFunctionParameters()
 {
     // epsilon is an acceptable error value.
     epsilon    = pow(10.0, -8);
-    max_region = 100.0;
-    min_region = -100.0;
+    min_region = domain_min;
+    max_region = domain_max;
 
-    optimum = function_number * 100;
+    optimum = 0;
 }
 
 // set best solution (bsf_solution) and its fitness value (bsf_fitness) in the initial population
@@ -59,9 +65,11 @@ Individual searchAlgorithm::makeNewIndividual()
 
 /*
   For each dimension j, if the mutant vector element v_j is outside the boundaries [x_min , x_max],
-  we applied this bound handling method If you'd like to know that precisely, please read: J. Zhang
-  and A. C. Sanderson, "JADE: Adaptive differential evolution with optional external archive," IEEE
-  Tran. Evol. Comput., vol. 13, no. 5, pp. 945–958, 2009.
+  we applied this bound handling method
+  If you'd like to know that precisely, please read:
+  J. Zhang and A. C. Sanderson, "JADE: Adaptive differential evolution with optional external
+  archive,"
+  IEEE Tran. Evol. Comput., vol. 13, no. 5, pp. 945–958, 2009.
  */
 void searchAlgorithm::modifySolutionWithParentMedium(Individual child, Individual parent)
 {
