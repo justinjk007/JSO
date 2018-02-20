@@ -1,5 +1,5 @@
-#ifndef _HEADER_H_
-#define _HEADER_H_
+#ifndef JSO_HPP
+#define JSO_HPP
 
 #include <cmath>
 #include <cstdlib>
@@ -139,4 +139,4 @@ class LSHADE : public searchAlgorithm
     int reduction_ind_num;
 };
 
-#endif
+#endif /* JSO_HPP */
