@@ -1,22 +1,19 @@
-* JSO_DE
+* jSO
 A differential evolution optimization library written in C++.
 
-Single Objective Real-Parameter Optimization.
+Single Objective Real-Parameter Optimization algorithm with
+self-adaptive Cross-over rate and scaling factor.
 
-JSO is improved version of i-LSHADE.
-iL-SHADE: Improved L-SHADE Algorithm (L-SHADE was proposed by Ryoji Tanabe and Alex Fukunaga at CEC2014).
+JSO is improved version of iL-SHADE.
 
-* Parameters to be controlled
-- Mutation factor
-- Scaling Factor
-- Cross-over rate
-- Population size
+iL-SHADE: Improved L-SHADE Algorithm (L-SHADE was proposed by Ryoji
+Tanabe and Alex Fukunaga at CEC2014).
 
-* References
+** References
 - https://youtu.be/7-hMYLXKBSI
 - https://youtu.be/cNVa42ASiPg
 
-* All original authors
+** All original authors
 - [[mailto:janez.brest@um.si][Janez Brest]]
 - Mirjam Sepesy Maucec
 - Borko Boskovic
