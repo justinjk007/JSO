@@ -8,4 +8,4 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic -g)
 endif(MSVC)
 
-# add_executable(main main.cc cec17_test_func.cc lshade.cc search_algorithm.cc)
+add_executable(run_tests tests/run_tests.cpp)

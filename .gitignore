@@ -1,1 +1,6 @@
 /build
+
+# Ignore GTags
+GPATH
+GRTAGS
+GTAGS
