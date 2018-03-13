@@ -1,4 +1,6 @@
 * jSO
+*This is still very much incomplete and being worked on*
+
 A differential evolution optimization library written in C++.
 
 Single Objective Real-Parameter Optimization algorithm with
