@@ -1,5 +1,227 @@
-#include "jSO.hpp"
+#ifndef JSO_HPP
+#define JSO_HPP
 
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include "../tests/integration_tests.hpp"
+
+using namespace std;
+
+#define PI 3.14159265358979323846264338327950288
+
+typedef double variable;
+typedef variable* Individual;
+typedef double Fitness;
+
+/* extern int g_function_number; */
+extern int g_problem_size;
+extern unsigned int g_max_num_evaluations;
+extern int function_name;
+
+extern int g_pop_size;
+extern int g_memory_size;
+extern double g_p_best_rate;
+extern double g_arc_rate;
+extern double domain_max;
+extern double domain_min;
+
+extern ofstream outFile;
+
+namespace jSO
+{
+class searchAlgorithm
+{
+   public:
+    virtual Fitness run() = 0;
+    long iteration_number = 0;  // Stores the number of iterations the algorithm has mutated too
+
+   protected:
+    void evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness);
+    void initializeFitnessFunctionParameters();
+
+    void initializeParameters();
+    Individual makeNewIndividual();
+    void modifySolutionWithParentMedium(Individual child, Individual parent);
+    void setBestSolution(const vector<Individual>& pop, const vector<Fitness>& fitness,
+                         Individual& bsf_solution, Fitness& bsf_fitness);
+
+    // Return random value with uniform distribution [0, 1)
+    inline double randDouble()
+    {
+        return (double)rand() / (double)RAND_MAX;
+    }
+
+    /*
+      Return random value from Cauchy distribution with mean "mu" and variance "gamma"
+      http://www.sat.t.u-tokyo.ac.jp/~omi/random_variables_generation.html#Cauchy
+    */
+    inline double cauchy_g(double mu, double gamma)
+    {
+        return mu + gamma * tan(PI * (randDouble() - 0.5));
+    }
+
+    /*
+      Return random value from normal distribution with mean "mu" and variance "gamma"
+      http://www.sat.t.u-tokyo.ac.jp/~omi/random_variables_generation.html#Gauss
+    */
+    inline double gauss(double mu, double sigma)
+    {
+        return mu + sigma * sqrt(-2.0 * log(randDouble())) * sin(2.0 * PI * randDouble());
+    }
+
+    // Recursive quick sort with index array
+    template <class VarType>
+    void sortIndexWithQuickSort(VarType array[], int first, int last, int index[])
+    {
+        VarType x        = array[(first + last) / 2];
+        int i            = first;
+        int j            = last;
+        VarType temp_var = 0;
+        int temp_num     = 0;
+
+        while (true) {
+            while (array[i] < x) i++;
+            while (x < array[j]) j--;
+            if (i >= j) break;
+
+            temp_var = array[i];
+            array[i] = array[j];
+            array[j] = temp_var;
+
+            temp_num = index[i];
+            index[i] = index[j];
+            index[j] = temp_num;
+
+            i++;
+            j--;
+        }
+
+        if (first < (i - 1)) sortIndexWithQuickSort(array, first, i - 1, index);
+        if ((j + 1) < last) sortIndexWithQuickSort(array, j + 1, last, index);
+    }
+
+    /* int function_number; */
+    int problem_size;
+    variable max_region;
+    variable min_region;
+    Fitness optimum;
+    // acceptable error value
+    Fitness epsilon;
+    unsigned int max_num_evaluations;
+    int pop_size;
+};
+
+class LSHADE : public searchAlgorithm
+{
+   public:
+    virtual Fitness run();
+    void setSHADEParameters();
+    void reducePopulationWithSort(vector<Individual>& pop, vector<Fitness>& fitness);
+    void operateCurrentToPBest1BinWithArchive(const vector<Individual>& pop, Individual child,
+                                              int& target, int& p_best_individual,
+                                              variable& scaling_factor, variable& cross_rate,
+                                              const vector<Individual>& archive, int& arc_ind_count,
+                                              int nfes);
+
+    int arc_size;
+    double arc_rate;
+    variable p_best_rate;
+    int memory_size;
+    int reduction_ind_num;
+};
+
+void searchAlgorithm::initializeParameters()
+{
+    // function_number     = g_function_number;
+    problem_size        = g_problem_size;
+    max_num_evaluations = g_max_num_evaluations;
+    pop_size            = g_pop_size;
+    initializeFitnessFunctionParameters();
+}
+
+void searchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness)
+{
+    for (int i = 0; i < pop_size; i++) {
+        // NOTE: If you want to enable these also uncomment the
+        // cec17_test_func.cc file from the CMakeFile so it can be
+        // compiled.
+
+        // cec14_test_func(pop[i],  &fitness[i], problem_size, 1, function_number);
+        // cec17_test_func(pop[i], &fitness[i], problem_size, 1, function_number);
+        this->iteration_number++;
+        rastrigin_func(pop[i], &fitness[i]);  // Call fitness function
+    }
+}
+
+void searchAlgorithm::initializeFitnessFunctionParameters()
+{
+    // epsilon is an acceptable error value.
+    epsilon    = pow(10.0, -8);
+    min_region = domain_min;
+    max_region = domain_max;
+
+    optimum = 0;
+}
+
+// set best solution (bsf_solution) and its fitness value (bsf_fitness) in the initial population
+void searchAlgorithm::setBestSolution(const vector<Individual>& pop, const vector<Fitness>& fitness,
+                                      Individual& bsf_solution, Fitness& bsf_fitness)
+{
+    int current_best_individual = 0;
+
+    for (int i = 1; i < pop_size; i++) {
+        if (fitness[current_best_individual] > fitness[i]) {
+            current_best_individual = i;
+        }
+    }
+
+    bsf_fitness = fitness[current_best_individual];
+    for (int i = 0; i < problem_size; i++) {
+        bsf_solution[i] = pop[current_best_individual][i];
+    }
+}
+
+// make new individual randomly
+Individual searchAlgorithm::makeNewIndividual()
+{
+    Individual individual = (variable*)malloc(sizeof(variable) * problem_size);
+
+    for (int i = 0; i < problem_size; i++) {
+        individual[i] = ((max_region - min_region) * randDouble()) + min_region;
+    }
+
+    return individual;
+}
+
+/*
+  For each dimension j, if the mutant vector element v_j is outside the boundaries [x_min , x_max],
+  we applied this bound handling method
+  If you'd like to know that precisely, please read:
+  J. Zhang and A. C. Sanderson, "JADE: Adaptive differential evolution with optional external
+  archive,"
+  IEEE Tran. Evol. Comput., vol. 13, no. 5, pp. 945–958, 2009.
+ */
+void searchAlgorithm::modifySolutionWithParentMedium(Individual child, Individual parent)
+{
+    int l_problem_size    = problem_size;
+    variable l_min_region = min_region;
+    variable l_max_region = max_region;
+
+    for (int j = 0; j < l_problem_size; j++) {
+        if (child[j] < l_min_region) {
+            child[j] = (l_min_region + parent[j]) / 2.0;
+        } else if (child[j] > l_max_region) {
+            child[j] = (l_max_region + parent[j]) / 2.0;
+        }
+    }
+}
 Fitness LSHADE::run()
 {
     cout << scientific << setprecision(8);
@@ -432,3 +654,6 @@ void LSHADE::setSHADEParameters()
     p_best_rate = g_p_best_rate;
     memory_size = g_memory_size;
 }
+
+}  // End of namspace JSO
+#endif /* JSO_HPP */

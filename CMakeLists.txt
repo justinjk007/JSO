@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.2)
-project (JSO)
+project (jSO)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -10,4 +10,4 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic -g)
 endif(MSVC)
 
-add_executable(run_tests tests/run_tests.cpp tests/integration_tests.cpp src/lshade.cc src/search_algorithm.cc)
+add_executable(run_tests tests/run_tests.cpp tests/integration_tests.cpp)
