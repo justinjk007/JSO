@@ -10,11 +10,12 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "CalculateGap.hpp"
+#include "../tests/integration_tests.hpp"
 
 using namespace std;
 
 #define PI 3.14159265358979323846264338327950288
+
 
 typedef double variable;
 typedef variable* Individual;
@@ -41,7 +42,6 @@ class searchAlgorithm
 {
    public:
     virtual Fitness run() = 0;
-    CalculateGap* fitness_algo_object;
     long iteration_number = 0;  // Stores the number of iterations the algorithm has mutated too
 
    protected:

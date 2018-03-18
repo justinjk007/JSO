@@ -19,7 +19,7 @@ void searchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<F
         // cec14_test_func(pop[i],  &fitness[i], problem_size, 1, function_number);
         // cec17_test_func(pop[i], &fitness[i], problem_size, 1, function_number);
         this->iteration_number++;
-        this->fitness_algo_object->getGap(pop[i], &fitness[i], this->iteration_number);
+        rastrigin_func(pop[i], &fitness[i]);  // Call fitness function
     }
 }
 
