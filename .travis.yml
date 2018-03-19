@@ -1,0 +1,21 @@
+dist: trusty
+sudo: required
+language: cpp
+
+notifications:
+ email: false
+
+addons:
+ apt:
+  sources:
+   - ubuntu-toolchain-r-test
+   - sourceline: 'ppa:beineri/opt-qt592-trusty'
+  packages:
+   - g++-5
+
+script:
+# Install the latest cgal library
+ - mkdir build
+ - cd build
+ - CXX=/usr/bin/g++-5 CC=/usr/bin/gcc-5 cmake ..
+ - cmake --build . -- -j4

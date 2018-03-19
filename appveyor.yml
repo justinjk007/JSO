@@ -1,0 +1,15 @@
+version: '{build}'
+
+image:
+  - Visual Studio 2017
+
+test: off
+
+clone_folder: c:\Repos\source
+
+build_script:
+  - cd C:\Repos\source\
+  - mkdir build
+  - cd build
+  - cmake C:\Repos\source -G "Visual Studio 15 Win64"
+  - cmake --build . --config "Release"
