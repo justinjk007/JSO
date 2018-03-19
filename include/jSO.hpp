@@ -16,8 +16,7 @@ using namespace std;
 
 #define PI 3.14159265358979323846264338327950288
 
-typedef double variable;
-typedef variable* Individual;
+typedef double* Individual;
 typedef double Fitness;
 
 /* extern int g_function_number; */
@@ -56,8 +55,8 @@ class searchAlgorithm
     template <class T>
     void sortIndexWithQuickSort(T array[], int first, int last, int index[]); // Recursive quick sort with index array
     int problem_size;
-    variable max_region;
-    variable min_region;
+    double max_region;
+    double min_region;
     Fitness optimum;                   // the goal fitness to be reached
     Fitness epsilon;                   // acceptable error value
     unsigned int max_num_evaluations;  // max number of evaluations
@@ -72,12 +71,12 @@ class LSHADE : public searchAlgorithm
     void reducePopulationWithSort(vector<Individual>& pop, vector<Fitness>& fitness);
     void operateCurrentToPBest1BinWithArchive(const vector<Individual>& pop, Individual child,
                                               int& target, int& p_best_individual,
-                                              variable& scaling_factor, variable& cross_rate,
+                                              double& scaling_factor, double& cross_rate,
                                               const vector<Individual>& archive, int& arc_ind_count,
                                               unsigned int nfes);
     int arc_size;
     double arc_rate;
-    variable p_best_rate;
+    double p_best_rate;
     int memory_size;
     int reduction_ind_num;
 };
@@ -129,7 +128,7 @@ void searchAlgorithm::setBestSolution(const vector<Individual>& pop, const vecto
 // make new individual randomly
 Individual searchAlgorithm::makeNewIndividual()
 {
-    Individual individual = (variable*)malloc(sizeof(variable) * problem_size);
+    Individual individual = (double*)malloc(sizeof(double) * problem_size);
 
     for (int i = 0; i < problem_size; i++) {
         individual[i] = ((max_region - min_region) * randDouble()) + min_region;
@@ -149,8 +148,8 @@ Individual searchAlgorithm::makeNewIndividual()
 void searchAlgorithm::modifySolutionWithParentMedium(Individual child, Individual parent)
 {
     int l_problem_size    = problem_size;
-    variable l_min_region = min_region;
-    variable l_max_region = max_region;
+    double l_min_region = min_region;
+    double l_max_region = max_region;
 
     for (int j = 0; j < l_problem_size; j++) {
         if (child[j] < l_min_region) {
@@ -236,13 +235,13 @@ Fitness LSHADE::run()
     // initialize population
     for (int i = 0; i < pop_size; i++) {
         pop.push_back(makeNewIndividual());
-        children.push_back((variable*)malloc(sizeof(variable) * problem_size));
+        children.push_back((double*)malloc(sizeof(double) * problem_size));
     }
 
     // evaluate the initial population's fitness values
     evaluatePopulation(pop, fitness);
 
-    Individual bsf_solution = (variable*)malloc(sizeof(variable) * problem_size);
+    Individual bsf_solution = (double*)malloc(sizeof(double) * problem_size);
     Fitness bsf_fitness;
     unsigned int nfes = 0;
 
@@ -274,32 +273,32 @@ Fitness LSHADE::run()
     int random_selected_arc_ind;
     vector<Individual> archive;
     for (int i = 0; i < arc_size; i++)
-        archive.push_back((variable*)malloc(sizeof(variable) * problem_size));
+        archive.push_back((double*)malloc(sizeof(double) * problem_size));
 
     int num_success_params     = 0;
     int old_num_success_params = 0;
-    vector<variable> success_sf;
-    vector<variable> success_cr;
-    vector<variable> dif_fitness;
+    vector<double> success_sf;
+    vector<double> success_cr;
+    vector<double> dif_fitness;
 
     // the contents of M_f and M_cr are all initialiezed 0.5
-    vector<variable> memory_sf(memory_size, 0.3);  // jSO
+    vector<double> memory_sf(memory_size, 0.3);  // jSO
     // vector <variable> memory_cr(memory_size, 0.5);          // iL-SHADE
-    vector<variable> memory_cr(memory_size, 0.8);
+    vector<double> memory_cr(memory_size, 0.8);
 
-    variable temp_sum_sf;
-    variable temp_sum_cr;
-    variable sum;
-    variable weight;
+    double temp_sum_sf;
+    double temp_sum_cr;
+    double sum;
+    double weight;
 
     // memory index counter
     int memory_pos = 0;
 
     // for new parameters sampling
-    variable mu_sf, mu_cr;
+    double mu_sf, mu_cr;
     int random_selected_period;
-    variable* pop_sf = (variable*)malloc(sizeof(variable) * pop_size);
-    variable* pop_cr = (variable*)malloc(sizeof(variable) * pop_size);
+    double* pop_sf = (double*)malloc(sizeof(double) * pop_size);
+    double* pop_cr = (double*)malloc(sizeof(double) * pop_size);
 
     // for current-to-pbest/1
     int p_best_ind;
@@ -482,7 +481,7 @@ Fitness LSHADE::run()
 
         // if numeber of successful parameters > 0, historical memories are updated
         if (num_success_params > 0) {
-            variable old_sf, old_cr;  // Janez
+            double old_sf, old_cr;  // Janez
             old_sf = memory_sf[memory_pos];
             old_cr = memory_cr[memory_pos];
 
@@ -578,13 +577,13 @@ Fitness LSHADE::run()
 
 void LSHADE::operateCurrentToPBest1BinWithArchive(const vector<Individual>& pop, Individual child,
                                                   int& target, int& p_best_individual,
-                                                  variable& scaling_factor, variable& cross_rate,
+                                                  double& scaling_factor, double& cross_rate,
                                                   const vector<Individual>& archive,
                                                   int& arc_ind_count, unsigned int nfes)
 {
     int r1, r2;
 
-    variable jF = scaling_factor;  // jSO
+    double jF = scaling_factor;  // jSO
     if (nfes < 0.2 * max_num_evaluations)
         jF = jF * 0.7;  // jSO
     else if (nfes < 0.4 * max_num_evaluations)
