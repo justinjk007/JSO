@@ -9,7 +9,6 @@ int g_pop_size;
 double g_arc_rate;
 int g_memory_size;
 double g_p_best_rate;
-ofstream outFile;
 double domain_max;
 double domain_min;
 

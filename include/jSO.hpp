@@ -19,19 +19,14 @@ using namespace std;
 typedef double* Individual;
 typedef double Fitness;
 
-/* extern int g_function_number; */
 extern int g_problem_size;
 extern unsigned int g_max_num_evaluations;
-extern int function_name;
-
 extern int g_pop_size;
 extern int g_memory_size;
 extern double g_p_best_rate;
 extern double g_arc_rate;
 extern double domain_max;
 extern double domain_min;
-
-extern ofstream outFile;
 
 namespace jSO
 {
@@ -399,45 +394,6 @@ Fitness LSHADE::run()
                 bsf_fitness = children_fitness[i];
                 for (int j = 0; j < problem_size; j++) bsf_solution[j] = children[i][j];
             }
-
-            // if (nfes % 1000 == 0) {
-            // //      cout << nfes << " " << bsf_fitness - optimum << endl;
-            // 	cout << bsf_fitness - optimum << endl;
-            // }
-
-            // CEC 2014: Record function error value (Fi(x)-Fi(x*)) after (0.01, 0.02, 0.03, 0.05,
-            // 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)*MaxFES for each run.
-            if (nfes % (g_problem_size * 100) == 0) {
-                if (nfes == (int)(0.01 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.02 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.03 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.05 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.1 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.2 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.3 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.4 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.5 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.6 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.7 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.8 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(0.9 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << " ";
-                else if (nfes == (int)(1.0 * max_num_evaluations))
-                    outFile << bsf_fitness - optimum << endl;
-            }
-
             if (nfes >= max_num_evaluations) break;
         }
         ////////////////////////////////////////////////////////////////////////////
