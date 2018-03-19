@@ -45,75 +45,23 @@ class searchAlgorithm
    protected:
     void evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness);
     void initializeFitnessFunctionParameters();
-
     void initializeParameters();
     Individual makeNewIndividual();
     void modifySolutionWithParentMedium(Individual child, Individual parent);
     void setBestSolution(const vector<Individual>& pop, const vector<Fitness>& fitness,
                          Individual& bsf_solution, Fitness& bsf_fitness);
-
-    // Return random value with uniform distribution [0, 1)
-    inline double randDouble()
-    {
-        return (double)rand() / (double)RAND_MAX;
-    }
-
-    /*
-      Return random value from Cauchy distribution with mean "mu" and variance "gamma"
-      http://www.sat.t.u-tokyo.ac.jp/~omi/random_variables_generation.html#Cauchy
-    */
-    inline double cauchy_g(double mu, double gamma)
-    {
-        return mu + gamma * tan(PI * (randDouble() - 0.5));
-    }
-
-    /*
-      Return random value from normal distribution with mean "mu" and variance "gamma"
-      http://www.sat.t.u-tokyo.ac.jp/~omi/random_variables_generation.html#Gauss
-    */
-    inline double gauss(double mu, double sigma)
-    {
-        return mu + sigma * sqrt(-2.0 * log(randDouble())) * sin(2.0 * PI * randDouble());
-    }
-
-    // Recursive quick sort with index array
-    template <class VarType>
-    void sortIndexWithQuickSort(VarType array[], int first, int last, int index[])
-    {
-        VarType x        = array[(first + last) / 2];
-        int i            = first;
-        int j            = last;
-        VarType temp_var = 0;
-        int temp_num     = 0;
-
-        while (true) {
-            while (array[i] < x) i++;
-            while (x < array[j]) j--;
-            if (i >= j) break;
-
-            temp_var = array[i];
-            array[i] = array[j];
-            array[j] = temp_var;
-
-            temp_num = index[i];
-            index[i] = index[j];
-            index[j] = temp_num;
-
-            i++;
-            j--;
-        }
-
-        if (first < (i - 1)) sortIndexWithQuickSort(array, first, i - 1, index);
-        if ((j + 1) < last) sortIndexWithQuickSort(array, j + 1, last, index);
-    }
-
+    inline double randDouble();
+    inline double cauchy_g(double mu, double gamma);
+    inline double gauss(double mu, double sigma);
+    template <class T>
+    void sortIndexWithQuickSort(T array[], int first, int last, int index[]); // Recursive quick sort with index array
     int problem_size;
     variable max_region;
     variable min_region;
-    Fitness optimum;          // the goal fitness to be reached
-    Fitness epsilon;          // acceptable error value
+    Fitness optimum;                   // the goal fitness to be reached
+    Fitness epsilon;                   // acceptable error value
     unsigned int max_num_evaluations;  // max number of evaluations
-    int pop_size;             // population size
+    int pop_size;                      // population size
 };
 
 class LSHADE : public searchAlgorithm
@@ -127,7 +75,6 @@ class LSHADE : public searchAlgorithm
                                               variable& scaling_factor, variable& cross_rate,
                                               const vector<Individual>& archive, int& arc_ind_count,
                                               unsigned int nfes);
-
     int arc_size;
     double arc_rate;
     variable p_best_rate;
@@ -213,6 +160,63 @@ void searchAlgorithm::modifySolutionWithParentMedium(Individual child, Individua
         }
     }
 }
+
+inline double searchAlgorithm::randDouble()
+{
+    return (double)rand() / (double)RAND_MAX;
+}
+
+inline double searchAlgorithm::cauchy_g(double mu, double gamma)
+{
+    /**
+     * Return random value from Cauchy distribution with mean "mu" and variance "gamma"
+     * http://www.sat.t.u-tokyo.ac.jp/~omi/random_variables_generation.html#Cauchy
+     */
+    return mu + gamma * tan(PI * (randDouble() - 0.5));
+}
+
+inline double searchAlgorithm::gauss(double mu, double sigma)
+{
+    /**
+     * Return random value from normal distribution with mean "mu" and variance "gamma"
+     * http://www.sat.t.u-tokyo.ac.jp/~omi/random_variables_generation.html#Gauss
+     */
+    return mu + sigma * sqrt(-2.0 * log(randDouble())) * sin(2.0 * PI * randDouble());
+}
+
+template <class T>
+void searchAlgorithm::sortIndexWithQuickSort(T array[], int first, int last, int index[])
+{
+    /**
+     * Recursive quick sort with index array
+     */
+    T x        = array[(first + last) / 2];
+    int i            = first;
+    int j            = last;
+    T temp_var = 0;
+    int temp_num     = 0;
+
+    while (true) {
+        while (array[i] < x) i++;
+        while (x < array[j]) j--;
+        if (i >= j) break;
+
+        temp_var = array[i];
+        array[i] = array[j];
+        array[j] = temp_var;
+
+        temp_num = index[i];
+        index[i] = index[j];
+        index[j] = temp_num;
+
+        i++;
+        j--;
+    }
+
+    if (first < (i - 1)) sortIndexWithQuickSort(array, first, i - 1, index);
+    if ((j + 1) < last) sortIndexWithQuickSort(array, j + 1, last, index);
+}
+
 Fitness LSHADE::run()
 {
     cout << scientific << setprecision(8);
