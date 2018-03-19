@@ -107,15 +107,13 @@ class searchAlgorithm
         if ((j + 1) < last) sortIndexWithQuickSort(array, j + 1, last, index);
     }
 
-    /* int function_number; */
     int problem_size;
     variable max_region;
     variable min_region;
-    Fitness optimum;
-    // acceptable error value
-    Fitness epsilon;
-    unsigned int max_num_evaluations;
-    int pop_size;
+    Fitness optimum;          // the goal fitness to be reached
+    Fitness epsilon;          // acceptable error value
+    unsigned int max_num_evaluations;  // max number of evaluations
+    int pop_size;             // population size
 };
 
 class LSHADE : public searchAlgorithm
@@ -128,7 +126,7 @@ class LSHADE : public searchAlgorithm
                                               int& target, int& p_best_individual,
                                               variable& scaling_factor, variable& cross_rate,
                                               const vector<Individual>& archive, int& arc_ind_count,
-                                              int nfes);
+                                              unsigned int nfes);
 
     int arc_size;
     double arc_rate;
@@ -160,7 +158,7 @@ void searchAlgorithm::initializeFitnessFunctionParameters()
     epsilon    = pow(10.0, -8);
     min_region = domain_min;
     max_region = domain_max;
-    optimum = 0; // The fitness we need to find, I think
+    optimum    = 0;  // The fitness we need to find, I think
 }
 
 // set best solution (bsf_solution) and its fitness value (bsf_fitness) in the initial population
@@ -242,7 +240,7 @@ Fitness LSHADE::run()
 
     Individual bsf_solution = (variable*)malloc(sizeof(variable) * problem_size);
     Fitness bsf_fitness;
-    int nfes = 0;
+    unsigned int nfes = 0;
 
     if ((fitness[0] - optimum) < epsilon) fitness[0] = optimum;
     bsf_fitness = fitness[0];
@@ -578,7 +576,7 @@ void LSHADE::operateCurrentToPBest1BinWithArchive(const vector<Individual>& pop,
                                                   int& target, int& p_best_individual,
                                                   variable& scaling_factor, variable& cross_rate,
                                                   const vector<Individual>& archive,
-                                                  int& arc_ind_count, int nfes)
+                                                  int& arc_ind_count, unsigned int nfes)
 {
     int r1, r2;
 

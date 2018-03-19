@@ -4,7 +4,7 @@
 
 // Global Variables for DE library
 int g_problem_size;
-unsigned int g_max_num_evaluations;
+int unsigned g_max_num_evaluations;
 int g_pop_size;
 double g_arc_rate;
 int g_memory_size;
