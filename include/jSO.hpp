@@ -34,7 +34,6 @@ class searchAlgorithm
 {
    public:
     virtual Fitness run() = 0;
-    long iteration_number = 0;  // Stores the number of iterations the algorithm has mutated too
 
    protected:
     void evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness);
@@ -48,7 +47,7 @@ class searchAlgorithm
     inline double cauchy_g(double mu, double gamma);
     inline double gauss(double mu, double sigma);
     template <class T>
-    void sortIndexWithQuickSort(T array[], int first, int last, int index[]); // Recursive quick sort with index array
+    void sortIndexWithQuickSort(T[], int, int, int[]);  // Recursive quick sort
     int problem_size;
     double max_region;
     double min_region;
@@ -78,7 +77,6 @@ class LSHADE : public searchAlgorithm
 
 void searchAlgorithm::initializeParameters()
 {
-    // function_number     = g_function_number;
     problem_size        = g_problem_size;
     max_num_evaluations = g_max_num_evaluations;
     pop_size            = g_pop_size;
@@ -88,7 +86,6 @@ void searchAlgorithm::initializeParameters()
 void searchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness)
 {
     for (int i = 0; i < pop_size; i++) {
-        this->iteration_number++;
         rastrigin_func(pop[i], &fitness[i]);  // Call fitness function
     }
 }
@@ -99,7 +96,7 @@ void searchAlgorithm::initializeFitnessFunctionParameters()
     epsilon    = pow(10.0, -8);
     min_region = domain_min;
     max_region = domain_max;
-    optimum    = 0;  // The fitness we need to find, I think
+    optimum    = 0;  // The fitness we need to find
 }
 
 // set best solution (bsf_solution) and its fitness value (bsf_fitness) in the initial population
@@ -142,7 +139,7 @@ Individual searchAlgorithm::makeNewIndividual()
  */
 void searchAlgorithm::modifySolutionWithParentMedium(Individual child, Individual parent)
 {
-    int l_problem_size    = problem_size;
+    int l_problem_size  = problem_size;
     double l_min_region = min_region;
     double l_max_region = max_region;
 
@@ -184,11 +181,11 @@ void searchAlgorithm::sortIndexWithQuickSort(T array[], int first, int last, int
     /**
      * Recursive quick sort with index array
      */
-    T x        = array[(first + last) / 2];
-    int i            = first;
-    int j            = last;
-    T temp_var = 0;
-    int temp_num     = 0;
+    T x          = array[(first + last) / 2];
+    int i        = first;
+    int j        = last;
+    T temp_var   = 0;
+    int temp_num = 0;
 
     while (true) {
         while (array[i] < x) i++;

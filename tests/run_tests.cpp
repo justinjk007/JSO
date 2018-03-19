@@ -12,7 +12,7 @@ double g_p_best_rate;
 double domain_max;
 double domain_min;
 
-TEST_CASE("Sample Test")  // Delete this
+TEST_CASE("Integration Test")
 {
     // random seed is selected based on time according to competition rules
     srand((unsigned)time(NULL));
