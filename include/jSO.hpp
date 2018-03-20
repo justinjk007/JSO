@@ -19,18 +19,9 @@ using namespace std;
 typedef double* Individual;
 typedef double Fitness;
 
-extern int g_problem_size;
-extern unsigned int g_max_num_evaluations;
-extern int g_pop_size;
-extern int g_memory_size;
-extern double g_p_best_rate;
-extern double g_arc_rate;
-extern double domain_max;
-extern double domain_min;
-
 namespace jSO
 {
-class searchAlgorithm
+class SearchAlgorithm
 {
    public:
     virtual Fitness run() = 0;
@@ -55,9 +46,19 @@ class searchAlgorithm
     Fitness epsilon;                   // acceptable error value
     unsigned int max_num_evaluations;  // max number of evaluations
     int pop_size;                      // population size
+
+   public:
+    int g_problem_size;
+    unsigned int g_max_num_evaluations;
+    int g_pop_size;
+    int g_memory_size;
+    double g_p_best_rate;
+    double g_arc_rate;
+    double domain_max;
+    double domain_min;
 };
 
-class LSHADE : public searchAlgorithm
+class LSHADE : public SearchAlgorithm
 {
    public:
     virtual Fitness run();
@@ -75,7 +76,7 @@ class LSHADE : public searchAlgorithm
     int reduction_ind_num;
 };
 
-void searchAlgorithm::initializeParameters()
+void SearchAlgorithm::initializeParameters()
 {
     problem_size        = g_problem_size;
     max_num_evaluations = g_max_num_evaluations;
@@ -83,14 +84,14 @@ void searchAlgorithm::initializeParameters()
     initializeFitnessFunctionParameters();
 }
 
-void searchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness)
+void SearchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness)
 {
     for (int i = 0; i < pop_size; i++) {
         rastrigin_func(pop[i], &fitness[i]);  // Call fitness function
     }
 }
 
-void searchAlgorithm::initializeFitnessFunctionParameters()
+void SearchAlgorithm::initializeFitnessFunctionParameters()
 {
     // epsilon is an acceptable error value.
     epsilon    = pow(10.0, -8);
@@ -100,7 +101,7 @@ void searchAlgorithm::initializeFitnessFunctionParameters()
 }
 
 // set best solution (bsf_solution) and its fitness value (bsf_fitness) in the initial population
-void searchAlgorithm::setBestSolution(const vector<Individual>& pop, const vector<Fitness>& fitness,
+void SearchAlgorithm::setBestSolution(const vector<Individual>& pop, const vector<Fitness>& fitness,
                                       Individual& bsf_solution, Fitness& bsf_fitness)
 {
     int current_best_individual = 0;
@@ -118,7 +119,7 @@ void searchAlgorithm::setBestSolution(const vector<Individual>& pop, const vecto
 }
 
 // make new individual randomly
-Individual searchAlgorithm::makeNewIndividual()
+Individual SearchAlgorithm::makeNewIndividual()
 {
     Individual individual = (double*)malloc(sizeof(double) * problem_size);
 
@@ -132,12 +133,11 @@ Individual searchAlgorithm::makeNewIndividual()
 /*
   For each dimension j, if the mutant vector element v_j is outside the boundaries [x_min , x_max],
   we applied this bound handling method
-  If you'd like to know that precisely, please read:
-  J. Zhang and A. C. Sanderson, "JADE: Adaptive differential evolution with optional external
+  If you'd like to know that precisely, please read:S J. Zhang and A. C. Sanderson, "JADE: Adaptive differential evolution with optional external
   archive,"
   IEEE Tran. Evol. Comput., vol. 13, no. 5, pp. 945–958, 2009.
  */
-void searchAlgorithm::modifySolutionWithParentMedium(Individual child, Individual parent)
+void SearchAlgorithm::modifySolutionWithParentMedium(Individual child, Individual parent)
 {
     int l_problem_size  = problem_size;
     double l_min_region = min_region;
@@ -152,12 +152,12 @@ void searchAlgorithm::modifySolutionWithParentMedium(Individual child, Individua
     }
 }
 
-inline double searchAlgorithm::randDouble()
+inline double SearchAlgorithm::randDouble()
 {
     return (double)rand() / (double)RAND_MAX;
 }
 
-inline double searchAlgorithm::cauchy_g(double mu, double gamma)
+inline double SearchAlgorithm::cauchy_g(double mu, double gamma)
 {
     /**
      * Return random value from Cauchy distribution with mean "mu" and variance "gamma"
@@ -166,7 +166,7 @@ inline double searchAlgorithm::cauchy_g(double mu, double gamma)
     return mu + gamma * tan(PI * (randDouble() - 0.5));
 }
 
-inline double searchAlgorithm::gauss(double mu, double sigma)
+inline double SearchAlgorithm::gauss(double mu, double sigma)
 {
     /**
      * Return random value from normal distribution with mean "mu" and variance "gamma"
@@ -176,7 +176,7 @@ inline double searchAlgorithm::gauss(double mu, double sigma)
 }
 
 template <class T>
-void searchAlgorithm::sortIndexWithQuickSort(T array[], int first, int last, int index[])
+void SearchAlgorithm::sortIndexWithQuickSort(T array[], int first, int last, int index[])
 {
     /**
      * Recursive quick sort with index array
