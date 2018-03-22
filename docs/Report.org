@@ -7,29 +7,29 @@
 #+LATEX_HEADER: \definecolor{background}{RGB}{255, 231, 231}
 #+LATEX_HEADER: \let\OldTexttt\texttt
 #+LATEX_HEADER: \renewcommand{\texttt}[1]{\OldTexttt{\colorbox{background}{\textcolor{foreground}{#1}}}}
-#+LATEX_HEADER: \newenvironment{lmodern}{\fontfamily{lmss}\selectfont}{\par}
+#+LATEX_HEADER: \newenvironment{lmss}{\fontfamily{lmss}\selectfont}{\par}
 
 
 #+BEGIN_EXPORT latex
 % This is the title page
 \thispagestyle{empty} % No page number on the first page
 \begin{center}
-\begin{lmodern}
+\begin{lmss}
 {\huge\textbf{Software Quality}\par}\\
 {\huge\textbf{SOFE 3980U}\par}
   \vspace{20mm}
   \includegraphics[scale=1.3]{uoit_logo.png}\\
   \vspace{40mm}
-  \begin{Large}
+  \begin{large}
       \textbf{Group 6}\\
       \text{Final Project : JSO, A differential Evolution library in C++}\\
       \vspace{25mm}
-      \textbf{Anthea Ariyajeyam 100556294}\\
+      \textbf{Justin Kaipada 100590167}\\
       \textbf{George Zackarov 10000000}\\
       \textbf{Zackarry Winn 10000000}\\
       \textbf{Logan McDonald 10000000}
-  \end{Large}
-\end{lmodern}
+  \end{large}
+\end{lmss}
 \end{center}
 \newpage
 #+END_EXPORT
