@@ -19,7 +19,7 @@ using namespace std;
 typedef double* Individual;
 typedef double Fitness;
 
-namespace jSO
+namespace JSO
 {
 class SearchAlgorithm
 {
@@ -48,7 +48,7 @@ class SearchAlgorithm
     Fitness optimum;    // The goal fitness to be reached
     Fitness epsilon;    // Acceptable error value
 
-protected:
+   protected:
     void evaluatePopulation(const vector<Individual>&, vector<Fitness>&);
     Individual makeNewIndividual();
     void modifySolutionWithParentMedium(Individual, Individual);
@@ -60,22 +60,22 @@ protected:
     void sortIndexWithQuickSort(T[], int, int, int[]);  // Recursive quick sort
 };
 
-class LSHADE : public SearchAlgorithm
+class JSO : public SearchAlgorithm
 {
    public:
     virtual Fitness run();
-    LSHADE(int size, double max, double min) : SearchAlgorithm(size, max, min)
+    JSO(int size, double max, double min) : SearchAlgorithm(size, max, min)
     {
         this->arc_size          = (int)round(pop_size * arc_rate);
         this->reduction_ind_num = 0;
     }
-    ~LSHADE() {}
+    ~JSO() {}
     void reducePopulationWithSort(vector<Individual>& pop, vector<Fitness>& fitness);
     void operateCurrentToPBest1BinWithArchive(const vector<Individual>&, Individual, int&, int&,
                                               double&, double&, const vector<Individual>&, int&,
                                               unsigned int);
 
-private:
+   private:
     int arc_size;
     int reduction_ind_num;
 };
@@ -123,7 +123,7 @@ Individual SearchAlgorithm::makeNewIndividual()
   If you'd like to know that precisely, please read:S J. Zhang and A. C. Sanderson, "JADE: Adaptive
   differential evolution with optional external archive," IEEE Tran. Evol. Comput., vol. 13, no. 5,
   pp. 945–958, 2009.
- */
+*/
 void SearchAlgorithm::modifySolutionWithParentMedium(Individual child, Individual parent)
 {
     int l_problem_size  = problem_size;
@@ -195,7 +195,7 @@ void SearchAlgorithm::sortIndexWithQuickSort(T array[], int first, int last, int
     if ((j + 1) < last) sortIndexWithQuickSort(array, j + 1, last, index);
 }
 
-Fitness LSHADE::run()
+Fitness JSO::run()
 {
     cout << scientific << setprecision(8);
 
@@ -510,11 +510,11 @@ Fitness LSHADE::run()
     return bsf_fitness - optimum;
 }
 
-void LSHADE::operateCurrentToPBest1BinWithArchive(const vector<Individual>& pop, Individual child,
-                                                  int& target, int& p_best_individual,
-                                                  double& scaling_factor, double& cross_rate,
-                                                  const vector<Individual>& archive,
-                                                  int& arc_ind_count, unsigned int nfes)
+void JSO::operateCurrentToPBest1BinWithArchive(const vector<Individual>& pop, Individual child,
+                                               int& target, int& p_best_individual,
+                                               double& scaling_factor, double& cross_rate,
+                                               const vector<Individual>& archive,
+                                               int& arc_ind_count, unsigned int nfes)
 {
     int r1, r2;
 
@@ -560,7 +560,7 @@ void LSHADE::operateCurrentToPBest1BinWithArchive(const vector<Individual>& pop,
     modifySolutionWithParentMedium(child, pop[target]);
 }
 
-void LSHADE::reducePopulationWithSort(vector<Individual>& pop, vector<Fitness>& fitness)
+void JSO::reducePopulationWithSort(vector<Individual>& pop, vector<Fitness>& fitness)
 {
     int worst_ind;
 
