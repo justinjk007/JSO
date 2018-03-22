@@ -25,11 +25,30 @@ class SearchAlgorithm
 {
    public:
     virtual Fitness run() = 0;
+    SearchAlgorithm(int size, double max, double min)
+        : problem_size(size), max_region(max), min_region(min)
+    {
+        this->memory_size         = 5;
+        this->pop_size            = (int)round(sqrt(size) * log(size) * 25);
+        this->max_num_evaluations = size * 100;
+        this->p_best_rate         = 0.25;
+        this->arc_rate            = 1;
+        this->optimum             = 0;
+        this->epsilon             = pow(10.0, -8);
+    }
+    int problem_size;
+    int memory_size;
+    int pop_size;                      // population size
+    unsigned int max_num_evaluations;  // max number of evaluations
+    double p_best_rate;
+    double arc_rate;
+    double max_region;
+    double min_region;
+    Fitness optimum;  // the goal fitness to be reached
+    Fitness epsilon;  // acceptable error value
 
    protected:
     void evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness);
-    void initializeFitnessFunctionParameters();
-    void initializeParameters();
     Individual makeNewIndividual();
     void modifySolutionWithParentMedium(Individual child, Individual parent);
     void setBestSolution(const vector<Individual>& pop, const vector<Fitness>& fitness,
@@ -39,65 +58,34 @@ class SearchAlgorithm
     inline double gauss(double mu, double sigma);
     template <class T>
     void sortIndexWithQuickSort(T[], int, int, int[]);  // Recursive quick sort
-    int problem_size;
-    double max_region;
-    double min_region;
-    Fitness optimum;                   // the goal fitness to be reached
-    Fitness epsilon;                   // acceptable error value
-    unsigned int max_num_evaluations;  // max number of evaluations
-    int pop_size;                      // population size
-
-   public:
-    int g_problem_size;
-    unsigned int g_max_num_evaluations;
-    int g_pop_size;
-    int g_memory_size;
-    double g_p_best_rate;
-    double g_arc_rate;
-    double domain_max;
-    double domain_min;
 };
 
 class LSHADE : public SearchAlgorithm
 {
    public:
     virtual Fitness run();
-    void setSHADEParameters();
+    LSHADE(int size, double max, double min) : SearchAlgorithm(size, max, min)
+    {
+        this->arc_size            = (int)round(pop_size * arc_rate);
+        this->reduction_ind_num   = 0;
+    }
     void reducePopulationWithSort(vector<Individual>& pop, vector<Fitness>& fitness);
     void operateCurrentToPBest1BinWithArchive(const vector<Individual>& pop, Individual child,
                                               int& target, int& p_best_individual,
                                               double& scaling_factor, double& cross_rate,
                                               const vector<Individual>& archive, int& arc_ind_count,
                                               unsigned int nfes);
+
+   private:
     int arc_size;
-    double arc_rate;
-    double p_best_rate;
-    int memory_size;
     int reduction_ind_num;
 };
-
-void SearchAlgorithm::initializeParameters()
-{
-    problem_size        = g_problem_size;
-    max_num_evaluations = g_max_num_evaluations;
-    pop_size            = g_pop_size;
-    initializeFitnessFunctionParameters();
-}
 
 void SearchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness)
 {
     for (int i = 0; i < pop_size; i++) {
         rastrigin_func(pop[i], &fitness[i]);  // Call fitness function
     }
-}
-
-void SearchAlgorithm::initializeFitnessFunctionParameters()
-{
-    // epsilon is an acceptable error value.
-    epsilon    = pow(10.0, -8);
-    min_region = domain_min;
-    max_region = domain_max;
-    optimum    = 0;  // The fitness we need to find
 }
 
 // set best solution (bsf_solution) and its fitness value (bsf_fitness) in the initial population
@@ -133,9 +121,9 @@ Individual SearchAlgorithm::makeNewIndividual()
 /*
   For each dimension j, if the mutant vector element v_j is outside the boundaries [x_min , x_max],
   we applied this bound handling method
-  If you'd like to know that precisely, please read:S J. Zhang and A. C. Sanderson, "JADE: Adaptive differential evolution with optional external
-  archive,"
-  IEEE Tran. Evol. Comput., vol. 13, no. 5, pp. 945–958, 2009.
+  If you'd like to know that precisely, please read:S J. Zhang and A. C. Sanderson, "JADE: Adaptive
+  differential evolution with optional external archive," IEEE Tran. Evol. Comput., vol. 13, no. 5,
+  pp. 945–958, 2009.
  */
 void SearchAlgorithm::modifySolutionWithParentMedium(Individual child, Individual parent)
 {
@@ -211,8 +199,6 @@ void SearchAlgorithm::sortIndexWithQuickSort(T array[], int first, int last, int
 Fitness LSHADE::run()
 {
     cout << scientific << setprecision(8);
-    initializeParameters();
-    setSHADEParameters();
 
     // cout << pop_size << endl;
     // cout << arc_size << endl;
@@ -268,7 +254,6 @@ Fitness LSHADE::run()
         archive.push_back((double*)malloc(sizeof(double) * problem_size));
 
     int num_success_params     = 0;
-    int old_num_success_params = 0;
     vector<double> success_sf;
     vector<double> success_cr;
     vector<double> dif_fitness;
@@ -429,7 +414,6 @@ Fitness LSHADE::run()
             }
         }
 
-        old_num_success_params = num_success_params;
         num_success_params     = success_sf.size();
 
         // if numeber of successful parameters > 0, historical memories are updated
@@ -496,12 +480,12 @@ Fitness LSHADE::run()
             reducePopulationWithSort(pop, fitness);
 
             // resize the archive size
-            arc_size = pop_size * g_arc_rate;
+            arc_size = pop_size * arc_rate;
             if (arc_ind_count > arc_size) arc_ind_count = arc_size;
 
             // resize the number of p-best individuals
             p_best_rate =
-                g_p_best_rate * (1.0 - 0.5 * nfes / (double)max_num_evaluations);  // JANEZ
+                p_best_rate * (1.0 - 0.5 * nfes / (double)max_num_evaluations);  // JANEZ
             p_num = round(pop_size * p_best_rate);
             if (p_num <= 1) p_num = 2;
         }
@@ -592,14 +576,6 @@ void LSHADE::reducePopulationWithSort(vector<Individual>& pop, vector<Fitness>& 
         fitness.erase(fitness.begin() + worst_ind);
         pop_size--;
     }
-}
-
-void LSHADE::setSHADEParameters()
-{
-    arc_rate    = g_arc_rate;
-    arc_size    = (int)round(pop_size * arc_rate);
-    p_best_rate = g_p_best_rate;
-    memory_size = g_memory_size;
 }
 
 }  // End of namspace JSO
