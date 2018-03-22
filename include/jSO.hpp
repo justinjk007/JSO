@@ -30,29 +30,29 @@ class SearchAlgorithm
     {
         this->memory_size         = 5;
         this->pop_size            = (int)round(sqrt(size) * log(size) * 25);
-        this->max_num_evaluations = size * 100;
+        this->max_num_evaluations = size * 10000;
         this->p_best_rate         = 0.25;
         this->arc_rate            = 1;
         this->optimum             = 0;
         this->epsilon             = pow(10.0, -8);
     }
-    int problem_size;
+    ~SearchAlgorithm() {}
+    int problem_size;  // Dimension of the problem being solved
     int memory_size;
-    int pop_size;                      // population size
-    unsigned int max_num_evaluations;  // max number of evaluations
+    int pop_size;                      // Population size
+    unsigned int max_num_evaluations;  // Max number of evaluations
     double p_best_rate;
     double arc_rate;
-    double max_region;
-    double min_region;
-    Fitness optimum;  // the goal fitness to be reached
-    Fitness epsilon;  // acceptable error value
+    double max_region;  // Minimum point of the domain of search
+    double min_region;  // Minimum point of the domain of search
+    Fitness optimum;    // The goal fitness to be reached
+    Fitness epsilon;    // Acceptable error value
 
-   protected:
-    void evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness);
+protected:
+    void evaluatePopulation(const vector<Individual>&, vector<Fitness>&);
     Individual makeNewIndividual();
-    void modifySolutionWithParentMedium(Individual child, Individual parent);
-    void setBestSolution(const vector<Individual>& pop, const vector<Fitness>& fitness,
-                         Individual& bsf_solution, Fitness& bsf_fitness);
+    void modifySolutionWithParentMedium(Individual, Individual);
+    void setBestSolution(const vector<Individual>&, const vector<Fitness>&, Individual&, Fitness&);
     inline double randDouble();
     inline double cauchy_g(double mu, double gamma);
     inline double gauss(double mu, double sigma);
@@ -66,17 +66,16 @@ class LSHADE : public SearchAlgorithm
     virtual Fitness run();
     LSHADE(int size, double max, double min) : SearchAlgorithm(size, max, min)
     {
-        this->arc_size            = (int)round(pop_size * arc_rate);
-        this->reduction_ind_num   = 0;
+        this->arc_size          = (int)round(pop_size * arc_rate);
+        this->reduction_ind_num = 0;
     }
+    ~LSHADE() {}
     void reducePopulationWithSort(vector<Individual>& pop, vector<Fitness>& fitness);
-    void operateCurrentToPBest1BinWithArchive(const vector<Individual>& pop, Individual child,
-                                              int& target, int& p_best_individual,
-                                              double& scaling_factor, double& cross_rate,
-                                              const vector<Individual>& archive, int& arc_ind_count,
-                                              unsigned int nfes);
+    void operateCurrentToPBest1BinWithArchive(const vector<Individual>&, Individual, int&, int&,
+                                              double&, double&, const vector<Individual>&, int&,
+                                              unsigned int);
 
-   private:
+private:
     int arc_size;
     int reduction_ind_num;
 };
@@ -253,7 +252,7 @@ Fitness LSHADE::run()
     for (int i = 0; i < arc_size; i++)
         archive.push_back((double*)malloc(sizeof(double) * problem_size));
 
-    int num_success_params     = 0;
+    int num_success_params = 0;
     vector<double> success_sf;
     vector<double> success_cr;
     vector<double> dif_fitness;
@@ -414,7 +413,7 @@ Fitness LSHADE::run()
             }
         }
 
-        num_success_params     = success_sf.size();
+        num_success_params = success_sf.size();
 
         // if numeber of successful parameters > 0, historical memories are updated
         if (num_success_params > 0) {
@@ -484,9 +483,8 @@ Fitness LSHADE::run()
             if (arc_ind_count > arc_size) arc_ind_count = arc_size;
 
             // resize the number of p-best individuals
-            p_best_rate =
-                p_best_rate * (1.0 - 0.5 * nfes / (double)max_num_evaluations);  // JANEZ
-            p_num = round(pop_size * p_best_rate);
+            p_best_rate = p_best_rate * (1.0 - 0.5 * nfes / (double)max_num_evaluations);  // JANEZ
+            p_num       = round(pop_size * p_best_rate);
             if (p_num <= 1) p_num = 2;
         }
     }
