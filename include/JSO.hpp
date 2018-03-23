@@ -10,11 +10,10 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "../tests/integration_tests.hpp"
 
 using namespace std;
 
-#define PI 3.14159265358979323846264338327950288
+const double PI = 3.14159265358979323846264338327950288;
 
 typedef double* Individual;
 typedef double Fitness;
@@ -36,17 +35,18 @@ class SearchAlgorithm
         this->optimum             = 0;
         this->epsilon             = pow(10.0, -8);
     }
-    ~SearchAlgorithm() {}
+    virtual ~SearchAlgorithm() {}
     int problem_size;  // Dimension of the problem being solved
     int memory_size;
     int pop_size;                      // Population size
     unsigned int max_num_evaluations;  // Max number of evaluations
     double p_best_rate;
     double arc_rate;
-    double max_region;  // Minimum point of the domain of search
-    double min_region;  // Minimum point of the domain of search
-    Fitness optimum;    // The goal fitness to be reached
-    Fitness epsilon;    // Acceptable error value
+    double max_region;                           // Minimum point of the domain of search
+    double min_region;                           // Minimum point of the domain of search
+    Fitness optimum;                             // The goal fitness to be reached
+    Fitness epsilon;                             // Acceptable error value
+    void (*fitness_function)(double*, double*);  // Function pointer for the fitness function.
 
    protected:
     void evaluatePopulation(const vector<Individual>&, vector<Fitness>&);
@@ -83,7 +83,8 @@ class JSO : public SearchAlgorithm
 void SearchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness)
 {
     for (int i = 0; i < pop_size; i++) {
-        rastrigin_func(pop[i], &fitness[i]);  // Call fitness function
+	// Call the fitness function pointed by the function pointer
+        this->fitness_function(pop[i], &fitness[i]);
     }
 }
 
