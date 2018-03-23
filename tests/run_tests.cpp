@@ -7,8 +7,6 @@ TEST_CASE("Integration Test")
 {
     // random seed is selected based on time according to competition rules
     srand((unsigned)time(NULL));
-
-    JSO::JSO algorithm(2,-5.12,5.12);
-    algorithm.fitness_function = rastrigin_func;
+    JSO::JSO algorithm(rastrigin_func,2,-5.12,5.12);
     algorithm.run();
 }

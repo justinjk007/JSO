@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -24,8 +25,8 @@ class SearchAlgorithm
 {
    public:
     virtual Fitness run() = 0;
-    SearchAlgorithm(int size, double max, double min)
-        : problem_size(size), max_region(max), min_region(min)
+    SearchAlgorithm(std::function<void(double*, double*)> fit, int size, double max, double min)
+        : fitness_function(fit), problem_size(size), max_region(max), min_region(min)
     {
         this->memory_size         = 5;
         this->pop_size            = (int)round(sqrt(size) * log(size) * 25);
@@ -36,17 +37,17 @@ class SearchAlgorithm
         this->epsilon             = pow(10.0, -8);
     }
     virtual ~SearchAlgorithm() {}
+    std::function<void(double*, double*)> fitness_function;  // Function pointer
     int problem_size;  // Dimension of the problem being solved
     int memory_size;
     int pop_size;                      // Population size
     unsigned int max_num_evaluations;  // Max number of evaluations
     double p_best_rate;
     double arc_rate;
-    double max_region;                           // Minimum point of the domain of search
-    double min_region;                           // Minimum point of the domain of search
-    Fitness optimum;                             // The goal fitness to be reached
-    Fitness epsilon;                             // Acceptable error value
-    void (*fitness_function)(double*, double*);  // Function pointer for the fitness function.
+    double max_region;  // Minimum point of the domain of search
+    double min_region;  // Minimum point of the domain of search
+    Fitness optimum;    // The goal fitness to be reached
+    Fitness epsilon;    // Acceptable error value
 
    protected:
     void evaluatePopulation(const vector<Individual>&, vector<Fitness>&);
@@ -64,7 +65,8 @@ class JSO : public SearchAlgorithm
 {
    public:
     virtual Fitness run();
-    JSO(int size, double max, double min) : SearchAlgorithm(size, max, min)
+    JSO(std::function<void(double*, double*)> fit, int size, double max, double min)
+        : SearchAlgorithm(fit, size, max, min)
     {
         this->arc_size          = (int)round(pop_size * arc_rate);
         this->reduction_ind_num = 0;
@@ -83,7 +85,7 @@ class JSO : public SearchAlgorithm
 void SearchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<Fitness>& fitness)
 {
     for (int i = 0; i < pop_size; i++) {
-	// Call the fitness function pointed by the function pointer
+        // Call the fitness function pointed by the function pointer
         this->fitness_function(pop[i], &fitness[i]);
     }
 }
@@ -470,7 +472,7 @@ Fitness JSO::run()
 
         // calculate the population size in the next generation
         plan_pop_size = (int)round(
-				   (((min_pop_size - max_pop_size) / (double)max_num_evaluations) * nfes) + max_pop_size);
+            (((min_pop_size - max_pop_size) / (double)max_num_evaluations) * nfes) + max_pop_size);
 
         if (pop_size > plan_pop_size) {
             reduction_ind_num = pop_size - plan_pop_size;
@@ -481,7 +483,7 @@ Fitness JSO::run()
 
             // resize the archive size
             arc_size = (int)(pop_size * arc_rate);
-	    if (arc_ind_count > arc_size) arc_ind_count = arc_size;
+            if (arc_ind_count > arc_size) arc_ind_count = arc_size;
 
             // resize the number of p-best individuals
             p_best_rate = p_best_rate * (1.0 - 0.5 * nfes / (double)max_num_evaluations);  // JANEZ
