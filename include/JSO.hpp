@@ -278,7 +278,7 @@ Fitness JSO::run()
 
     // for current-to-pbest/1
     int p_best_ind;
-    int p_num         = round(pop_size * p_best_rate);
+    int p_num         = (int)round(pop_size * p_best_rate);
     int* sorted_array = (int*)malloc(sizeof(int) * pop_size);
     Fitness* temp_fit = (Fitness*)malloc(sizeof(Fitness) * pop_size);
 
@@ -413,7 +413,7 @@ Fitness JSO::run()
             }
         }
 
-        num_success_params = success_sf.size();
+        num_success_params = (int)success_sf.size();
 
         // if numeber of successful parameters > 0, historical memories are updated
         if (num_success_params > 0) {
@@ -468,8 +468,8 @@ Fitness JSO::run()
         }
 
         // calculate the population size in the next generation
-        plan_pop_size = round(
-            (((min_pop_size - max_pop_size) / (double)max_num_evaluations) * nfes) + max_pop_size);
+        plan_pop_size = (int)round(
+				   (((min_pop_size - max_pop_size) / (double)max_num_evaluations) * nfes) + max_pop_size);
 
         if (pop_size > plan_pop_size) {
             reduction_ind_num = pop_size - plan_pop_size;
@@ -479,12 +479,12 @@ Fitness JSO::run()
             reducePopulationWithSort(pop, fitness);
 
             // resize the archive size
-            arc_size = pop_size * arc_rate;
-            if (arc_ind_count > arc_size) arc_ind_count = arc_size;
+            arc_size = (int)(pop_size * arc_rate);
+	    if (arc_ind_count > arc_size) arc_ind_count = arc_size;
 
             // resize the number of p-best individuals
             p_best_rate = p_best_rate * (1.0 - 0.5 * nfes / (double)max_num_evaluations);  // JANEZ
-            p_num       = round(pop_size * p_best_rate);
+            p_num       = (int)round(pop_size * p_best_rate);
             if (p_num <= 1) p_num = 2;
         }
     }
