@@ -12,7 +12,7 @@
 #include <vector>
 #include "../tests/integration_tests.hpp"
 
-using namespace std;
+using std::vector;
 
 #define PI 3.14159265358979323846264338327950288
 
@@ -197,7 +197,7 @@ void SearchAlgorithm::sortIndexWithQuickSort(T array[], int first, int last, int
 
 Fitness JSO::run()
 {
-    cout << scientific << setprecision(8);
+    std::cout << std::scientific << std::setprecision(8);
 
     // cout << pop_size << endl;
     // cout << arc_size << endl;
