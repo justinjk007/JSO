@@ -86,7 +86,11 @@ void SearchAlgorithm::evaluatePopulation(const vector<Individual>& pop, vector<F
 {
     for (int i = 0; i < pop_size; i++) {
         // Call the fitness function pointed by the function pointer
-        this->fitness_function(pop[i], &fitness[i]);
+        try {
+	    this->fitness_function(pop[i], &fitness[i]);
+        } catch (const std::bad_function_call& e) {
+            std::cout << e.what() <<" fitness function cannot be accessed" << '\n';
+        }
     }
 }
 
