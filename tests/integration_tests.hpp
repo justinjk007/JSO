@@ -2,7 +2,6 @@
 #define INTEGRATION_TESTS_HPP
 
 void rastrigin_func(double* x, double* f); /* Rastrigin's  */
-
 class TestFunction
 {
    public:

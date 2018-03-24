@@ -27,4 +27,5 @@ void TestFunction::sphere_func(double* x, double* f)
     for (i = 0; i < nx; i++) {
         f[0] += x[i] * x[i];
     }
+    std::cout << "The fitness is " << std::setprecision(3) << f[0] << "\n";
 }
