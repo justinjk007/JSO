@@ -27,7 +27,7 @@ hold the fitness value you calculate when it returns.
 Say =rastrigin_func(double*,double*)= is defined, it can be optimized
 like this.
 
-#+BEGIN_SRC cpp-mode
+#+BEGIN_SRC c++
 JSO::JSO algorithm(rastrigin_func, 2, -5.12, 5.12);
 algorithm.run();
 #+END_SRC
@@ -35,14 +35,14 @@ algorithm.run();
 - =2= is the dimension of the problem/ no: of parameters needed for your fitness function.
 - =-5.12= is the minimum value of the population.
 - =-5.12= is the maximum value of the population.
-- The code will exist after maximum iterations or based on your exit criteria.
+- The code will exit after maximum iterations or based on your exit criteria.
 
 *** Example, using a member function
 Say =Foo::sphere_func(double*,double*)= is defined, it can be optimized
 like this using a *lambda*
 
-#+BEGIN_SRC cpp-mode
-Using namspace JSO;
+#+BEGIN_SRC c++
+using namspace JSO;
 Foo obj;
 JSO algorithm([&obj](double* p1, double* p2) { obj.sphere_func(p1, p2); }, 2, -100, 100);
 algorithm.run();
