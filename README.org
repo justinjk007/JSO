@@ -48,13 +48,11 @@ JSO algorithm([&obj](double* p1, double* p2) { obj.sphere_func(p1, p2); }, 2, -1
 algorithm.run();
 #+END_SRC
 
-** References
-- https://youtu.be/7-hMYLXKBSI
-- https://youtu.be/cNVa42ASiPg
-
 ** All original authors
 - [[mailto:janez.brest@um.si][Janez Brest]]
 - Mirjam Sepesy Maucec
 - Borko Boskovic
 - [[mailto:rt.ryoji.tanabe@gmail.com][Ryoji Tanabe]]
 - Alex Fukunaga
+
+Also, thanks to [[https://cpplang.now.sh/][cpp-slack]]
