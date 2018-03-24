@@ -8,6 +8,12 @@
 #+LATEX_HEADER: \let\OldTexttt\texttt
 #+LATEX_HEADER: \renewcommand{\texttt}[1]{\OldTexttt{\colorbox{background}{\textcolor{foreground}{#1}}}}
 #+LATEX_HEADER: \newenvironment{lmss}{\fontfamily{lmss}\selectfont}{\par}
+#+LATEX_HEADER: \usepackage{hyperref} % Make the hyper-links prettier
+#+LATEX_HEADER: \hypersetup{
+#+LATEX_HEADER: colorlinks=true,
+#+LATEX_HEADER: linkcolor=blue!70!white,
+#+LATEX_HEADER: urlcolor=blue!95!black
+#+LATEX_HEADER: }
 
 #+BEGIN_EXPORT latex
 % This is the title page
