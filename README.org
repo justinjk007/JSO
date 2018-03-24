@@ -1,7 +1,7 @@
-* jSO
-*This is still very much incomplete and being worked on*
+* JSO
+#+html:<a href="https://isocpp.org/"><img src="https://img.shields.io/badge/language-C++-blue.svg" /></a> <a href="https://en.wikipedia.org/wiki/C%2B%2B11"><img src="https://img.shields.io/badge/C%2B%2B-11-blue.svg" /></a> <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" /></a>
 
-A differential evolution optimization library written in C++.
+A differential evolution optimization library written in C++ 11.
 
 Single Objective Real-Parameter Optimization algorithm with
 self-adaptive Cross-over rate and scaling factor.
@@ -10,6 +10,43 @@ JSO is improved version of iL-SHADE.
 
 iL-SHADE: Improved L-SHADE Algorithm (L-SHADE was proposed by Ryoji
 Tanabe and Alex Fukunaga at CEC2014).
+
+** Usage
+This is a header only library, include =JSO.hpp= from the include folder
+and you are done.
+
+To optimize a function it should have the following *signature*
+
+=void your_fitness_function (double* ,double*)=
+
+here the first pointer will point towards a vector of the parameters
+you need for your fitness function and second double pointer should
+hold the fitness value you calculate when it returns.
+
+*** Example, using a regular function
+Say =rastrigin_func(double*,double*)= is defined, it can be optimized
+like this.
+
+#+BEGIN_SRC cpp-mode
+JSO::JSO algorithm(rastrigin_func, 2, -5.12, 5.12);
+algorithm.run();
+#+END_SRC
+- Here =rastrigin_func= is the name of the function.
+- =2= is the dimension of the problem/ no: of parameters needed for your fitness function.
+- =-5.12= is the minimum value of the population.
+- =-5.12= is the maximum value of the population.
+- The code will exist after maximum iterations or based on your exit criteria.
+
+*** Example, using a member function
+Say =Foo::sphere_func(double*,double*)= is defined, it can be optimized
+like this using a *lambda*
+
+#+BEGIN_SRC cpp-mode
+Using namspace JSO;
+Foo obj;
+JSO algorithm([&obj](double* p1, double* p2) { obj.sphere_func(p1, p2); }, 2, -100, 100);
+algorithm.run();
+#+END_SRC
 
 ** References
 - https://youtu.be/7-hMYLXKBSI

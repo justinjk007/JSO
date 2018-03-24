@@ -26,6 +26,6 @@ TEST_CASE("Integration test case with member function")
 {
     srand((unsigned)time(NULL));
     TestFunction sphere;
-    JSO::JSO algorithm([&sphere](double* p1, double* p2) { sphere.sphere_func(p1, p2); }, 2, -5.12, 5.12); // lambda blackmagic
+    JSO::JSO algorithm([&sphere](double* p1, double* p2) { sphere.sphere_func(p1, p2); }, 2, -100, 100); // lambda blackmagic
     algorithm.run();
 }
