@@ -8,3 +8,4 @@ GTAGS
 # Ignore tex, org-mode is everything
 *.tex
 *.pdf
+*.log

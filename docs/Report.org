@@ -81,20 +81,26 @@ pleasure that has no annoying consequences, or one who avoids a pain
 that produces no resultant pleasure?"
 
 * Code Re-factoring/Re-designing
-Section 1.10.33 of "de Finibus Bonorum et Malorum", written by Cicero
-in 45 BC "At vero eos et accusamus et iusto odio dignissimos ducimus
-qui blanditiis praesentium voluptatum deleniti atque corrupti quos
-dolores et quas molestias excepturi sint occaecati cupiditate non
-provident, similique sunt in culpa qui officia deserunt mollitia
-animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis
-est et expedita distinctio. Nam libero tempore, cum soluta nobis est
-eligendi optio cumque nihil impedit quo minus id quod maxime placeat
-facere possimus, omnis voluptas assumenda est, omnis dolor
-repellendus. Temporibus autem quibusdam et aut officiis debitis aut
-rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint
-et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente
-delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut
-perferendis doloribus asperiores repellat."
+Sample for testing formatting
+#+BEGIN_SRC c++
+class SearchAlgorithm
+{
+   public:
+    virtual Fitness run() = 0;
+    virtual ~SearchAlgorithm() {}
+    std::function<void(double*, double*)> fitness_function;  // Function pointer
+    int problem_size;  // Dimension of the problem being solved
+    int memory_size;
+    int pop_size;                      // Population size
+    unsigned int max_num_evaluations;  // Max number of evaluations
+    double p_best_rate;
+    double arc_rate;
+    double max_region;  // Minimum point of the domain of search
+    double min_region;  // Minimum point of the domain of search
+    Fitness optimum;    // The goal fitness to be reached
+    Fitness epsilon;    // Acceptable error value
+};
+#+END_SRC
 
 * Test Cases
 1914 translation by H. Rackham "On the other hand, we denounce with
