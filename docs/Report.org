@@ -1,13 +1,16 @@
 #+OPTIONS: toc:nil num:t
 #+LATEX_CLASS: article
 #+LATEX_CLASS_OPTIONS: [a4paper,12pt]
+#+LATEX_HEADER: \usepackage[T1]{fontenc} % For times new roman font
+#+LATEX_HEADER: \usepackage{mathptmx} % For times new roman font
+#+LATEX_HEADER: \linespread{1.3} % Change line spacing
 #+LATEX_HEADER: \usepackage{xcolor}
 #+LATEX_HEADER: \usepackage{soul}
-#+LATEX_HEADER: \definecolor{foreground}{RGB}{184, 83, 83}
-#+LATEX_HEADER: \definecolor{background}{RGB}{255, 231, 231}
+#+LATEX_HEADER: \definecolor{foreground}{RGB}{184, 83, 83} % For verbatim
+#+LATEX_HEADER: \definecolor{background}{RGB}{255, 231, 231} % For verbatim
 #+LATEX_HEADER: \let\OldTexttt\texttt
 #+LATEX_HEADER: \renewcommand{\texttt}[1]{\OldTexttt{\colorbox{background}{\textcolor{foreground}{#1}}}}
-#+LATEX_HEADER: \newenvironment{lmss}{\fontfamily{lmss}\selectfont}{\par}
+#+LATEX_HEADER: \newenvironment{lmss}{\fontfamily{phv}\selectfont}{\par}
 #+LATEX_HEADER: \usepackage{hyperref} % Make the hyper-links prettier
 #+LATEX_HEADER: \hypersetup{
 #+LATEX_HEADER: colorlinks=true,
@@ -43,20 +46,20 @@
 #+END_EXPORT
 
 * Abstract
-Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero
-in 45 BC "Sed ut perspiciatis unde omnis iste natus error sit
-voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque
-ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
-qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui
-dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed
-quia non numquam eius modi tempora incidunt ut labore et dolore magnam
-aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum
-exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex
-ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in
-ea voluptate velit esse quam nihil molestiae consequatur, vel illum
-qui dolorem eum fugiat quo voluptas nulla pariatur?"
+The aim of our work was to further develop our knowledge in Software
+Quality while implementing/re-factoring a useful piece of software
+library. Header only libraries are among the most widely used types of
+C++ frameworks known for their simplicity of use and dependency
+management. In this project we set out to develop a Header only
+library by re-factoring and re-designing some of the Work written by
+Janez Brest /et al/ named as *JSO*, which is a hybrid differential
+evolution algorithm. The piece of code we are re-factoring was written
+for benchmarks and research purposes, we made it into library that
+anyone can use for Optimization problems. The quality of the code was
+highly improved using Modern C++ techniques and making the library
+less confusing to use as possible. This allows the end user to use
+this library by writing less coupling code to connect his/her fitness
+function to our Optimization function.
 
 #+LATEX: \newpage
 
