@@ -167,20 +167,20 @@ delete algorithm;
 As you can see most of these code can be moved as it mostly assigning constants and such. With the
 new re-design the user just has to write this.
 
-Say =rastrigin_func(double*,double*)= is defined, it can be optimized like this.
+Say =rastrigin(double*,double*)= is defined, it can be optimized like this.
 #+ATTR_LATEX: :options language=cpp,caption="Non-member function optimization",numbers=left
 #+BEGIN_SRC c++
-JSO::JSO algorithm(rastrigin_func, 2, -5.12, 5.12);
+JSO::JSO algorithm(rastrigin, 2, -5.12, 5.12);
 algorithm.run();
 #+END_SRC
 
 
-Say =Foo::sphere_func(double*,double*)= is defined, it can be optimized like this using a /lambda/
+Say =Foo::sphere(double*,double*)= is defined, it can be optimized like this using a /lambda/
 #+ATTR_LATEX: :options language=cpp,caption="Member function optimization",numbers=left
 #+BEGIN_SRC c++
 using namspace JSO;
 Foo obj;
-JSO algorithm([&obj](double* p1, double* p2) { obj.sphere_func(p1, p2); }, 2, -100, 100);
+JSO algorithm([&obj](double* a, double* b) { obj.sphere(a, a); }, 2, -100, 100);
 algorithm.run();
 #+END_SRC
 
