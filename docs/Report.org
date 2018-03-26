@@ -13,7 +13,7 @@
 #+LATEX_HEADER: \definecolor{foreground}{RGB}{184, 83, 83} % For verbatim
 #+LATEX_HEADER: \definecolor{background}{RGB}{255, 231, 231} % For verbatim
 #+LATEX_HEADER: \let\OldTexttt\texttt
-#+LATEX_HEADER: \renewcommand{\texttt}[1]{\OldTexttt{\colorbox{background}{\textcolor{foreground}{#1}}}}
+#+LATEX_HEADER: \renewcommand{\texttt}[1]{\OldTexttt{\footnotesize\colorbox{background}{\textcolor{foreground}{#1}}}}
 #+LATEX_HEADER: \newenvironment{helvetica}{\fontfamily{phv}\selectfont}{\par}
 #+LATEX_HEADER: \usepackage{hyperref} % Make the hyper-links prettier
 #+LATEX_HEADER: \hypersetup{
@@ -96,33 +96,99 @@ Electrical Engineering and Computer Science, University of Maribor. Our aim was 
 algorithm and the source code they provided to build a library that anyone can use by redesigning
 the original source code that was written just for benchmarking and proof of work. The source code
 was also presented at /CEC17/. But not distributed anywhere in the form of a library. We where able to
-get hold of the source code and with the permission of the authors work on it make a C++ library out
-of it. JSO is hybrid algorithm that was designed after many years and iterations of algorithm which
-can solve optimization problems faster for problems with bigger dimensions. This is was the second
-best algorithm presented in /CEC17/.
+get hold of the source code and with the permission of the authors, work on it make a C++ library
+out of it. JSO is hybrid algorithm that was designed after many years and iterations of algorithm
+which can solve optimization problems faster for problems with bigger dimensions. This is was the
+second best algorithm presented in /CEC17/. Although the code was not distributed anywhere previously
+it is as mentioned by the authors free to use and modify and published under the GPLv3 license. So
+we used modern C++ techniques to redesign and refactor the structure to make it easy to use and more
+intuitive.
 
 * Design Choices
-Sample for testing formatting
-#+ATTR_LATEX: :options language=cpp,numbers=none
+In evolutionary computation a fitness function is written to optimize any problem in hand. It scores
+the given solution with a number. The role of JSO is to produce new solutions efficiently and get
+the feedback from the fitness function. Fitness functions are written by the user who wants to
+optimize a problem and then it is coupled with JSO to find a solution. Not all problems are
+optimizable how ever.
+
+ Although the source code was written for benchmarking, anyone with an intermediate knowledge of
+C/C++ can still use the algorithm if they figured out what is going on with the whole of the source
+code and where are the fitness function calls are being made. We wanted to eliminate the need for
+anyone wanting to use the algorithm to know everything about it to use it. If someone needs to spend
+a good amount of time understanding every library fully before they use it things get very counter
+intuitive and the solution for original problem in hand will get stalled.
+
+The original source code was written among a few files which used a mix of *C* and *C++* libraries by
+depending on libraries that where only available on Linux systems and/or where depreciated on other
+platforms. Originally files where then compiled using a makefile. This meant that the source can
+only be used in Linux systems. We ported the build system to CMake, and took of all the dependencies
+that made the source code stuck to Linux. Granted these where easy fixes available on the C++
+standard library that was supported everywhere. This made the source code portable very easily. We
+added *Appveyor* and *Travis CI* support for continuous integration and made sure that it was being
+build fine on all major platforms. This way we also tested the new source code and build system on
+all major C++ compilers like MSVC,Clang and GCC.
+
+Next step was clear all the clutter and difficulty when actually using the source files. Previously
+to use the source code you will have to manage three files, all the main library variables where
+declared as =extern globals=. Which meant that anyone using the library will also have to declare all
+of these globals again and then attach there values to it. This accounts for very inefficient coding
+style and a pollution of the global memory. Together with this the user also needs to include his
+function declarations here again so that *JSO* can call his or her fitness function. If the user is
+using any other libraries for visualizing the optimization the user needs to include both of the
+libraries again in, say the main file. This means the code is jumping around everywhere and the
+programmer has to jump with it. We wanted to improve on this unmaintainable messy pattern. Using
+modern C++ such as =std::function=[fn:2] and =lambdas=[fn:3] we were able to do this easily. We also
+removed all the globals and added them as member variables so *C++*'s =RAII= can take care of the memory
+management instead of the user.
+
+Previously the user has to write this much code for coupling and even more for complex softwares
+with visualization as well.
+
+#+ATTR_LATEX: :options language=cpp,caption="Code written before refactoring",numbers=left
 #+BEGIN_SRC C++
-class SearchAlgorithm
-{
-   public:
-    virtual Fitness run() = 0;
-    virtual ~SearchAlgorithm() {}
-    std::function<void(double*, double*)> fitness_function;  // Function pointer
-    int problem_size;  // Dimension of the problem being solved
-    int memory_size;
-    int pop_size;                      // Population size
-    unsigned int max_num_evaluations;  // Max number of evaluations
-    double p_best_rate;
-    double arc_rate;
-    double max_region;  // Minimum point of the domain of search
-    double min_region;  // Minimum point of the domain of search
-    Fitness optimum;    // The goal fitness to be reached
-    Fitness epsilon;    // Acceptable error value
-};
+g_problem_size        = 7; // dimension size.
+g_max_num_evaluations = g_problem_size * 10000;
+srand((unsigned)time(NULL));
+g_pop_size    = (int)round(sqrt(g_problem_size) * log(g_problem_size) * 25);
+g_memory_size = 5;
+g_arc_rate    = 1;
+g_p_best_rate = 0.25;
+domain_min = 90;
+domain_max = 120;
+CalculateGap* fitness_algo = new CalculateGap();
+searchAlgorithm* algorithm     = new LSHADE();
+algorithm->fitness_algo_object = fitness_algo;
+algorithm->run();
+delete fitness_algo;
+delete algorithm;
+// The globals are never deleted :(
 #+END_SRC
+
+As you can see most of these code can be moved as it mostly assigning constants and such. With the
+new re-design the user just has to write this.
+
+Say =rastrigin(double*,double*)= is defined, it can be optimized like this.
+#+ATTR_LATEX: :options language=cpp,caption="Non-member function optimization",numbers=left
+#+BEGIN_SRC c++
+JSO::JSO algorithm(rastrigin, 2, -5.12, 5.12);
+algorithm.run();
+#+END_SRC
+
+
+Say =Foo::sphere(double*,double*)= is defined, it can be optimized like this using a /lambda/
+#+ATTR_LATEX: :options language=cpp,caption="Member function optimization",numbers=left
+#+BEGIN_SRC c++
+using namspace JSO;
+Foo obj;
+JSO algorithm([&obj](double* a, double* b) { obj.sphere(a, a); }, 2, -100, 100);
+algorithm.run();
+#+END_SRC
+
+As you can see the usage has become very cleaner and easier. Allowing =RAII= to take over memory
+management also stops potential memory leaks by the user.
+
+[fn:2] http://en.cppreference.com/w/cpp/utility/functional/function
+[fn:3] http://en.cppreference.com/w/cpp/language/lambda
 
 * Implementation Challenges
 1914 translation by H. Rackham "On the other hand, we denounce with righteous indignation and
