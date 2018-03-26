@@ -6,24 +6,52 @@
 #+LATEX_HEADER: \linespread{1.3} % Change line spacing
 #+LATEX_HEADER: \usepackage{xcolor}
 #+LATEX_HEADER: \usepackage{soul}
+#+LATEX_HEADER: \usepackage{helvet}
 #+LATEX_HEADER: \usepackage{listings}
+#+LATEX_HEADER: \usepackage{inconsolata}
+#+LATEX_HEADER: \usepackage{xcolor-solarized}
 #+LATEX_HEADER: \definecolor{foreground}{RGB}{184, 83, 83} % For verbatim
 #+LATEX_HEADER: \definecolor{background}{RGB}{255, 231, 231} % For verbatim
 #+LATEX_HEADER: \let\OldTexttt\texttt
 #+LATEX_HEADER: \renewcommand{\texttt}[1]{\OldTexttt{\colorbox{background}{\textcolor{foreground}{#1}}}}
-#+LATEX_HEADER: \newenvironment{lmss}{\fontfamily{phv}\selectfont}{\par}
+#+LATEX_HEADER: \newenvironment{helvetica}{\fontfamily{phv}\selectfont}{\par}
 #+LATEX_HEADER: \usepackage{hyperref} % Make the hyper-links prettier
 #+LATEX_HEADER: \hypersetup{
 #+LATEX_HEADER: colorlinks=true,
 #+LATEX_HEADER: linkcolor=blue!70!white,
 #+LATEX_HEADER: urlcolor=blue!95!black
 #+LATEX_HEADER: }
+#+LATEX_HEADER: \lstdefinelanguage{cpp}{
+#+LATEX_HEADER: language=C++,
+#+LATEX_HEADER: morekeywords={cerr,exit,string},
+#+LATEX_HEADER: deletekeywords={...},
+#+LATEX_HEADER: escapeinside={\%*}{*)},
+#+LATEX_HEADER: showspaces=false,
+#+LATEX_HEADER: showstringspaces=false,
+#+LATEX_HEADER: showtabs=false,
+#+LATEX_HEADER: stepnumber=1,
+#+LATEX_HEADER: tabsize=4,
+#+LATEX_HEADER: breakatwhitespace=false,
+#+LATEX_HEADER: breaklines=true,
+#+LATEX_HEADER: backgroundcolor=\color{solarized-base3},
+#+LATEX_HEADER: basicstyle=\scriptsize\ttfamily\color{solarized-base0},
+#+LATEX_HEADER: commentstyle=\itshape\color{solarized-base01},
+#+LATEX_HEADER: keywordstyle=\color{solarized-green},
+#+LATEX_HEADER: identifierstyle=\color{solarized-blue},
+#+LATEX_HEADER: stringstyle=\color{solarized-cyan},
+#+LATEX_HEADER: moredelim = *[l][\color{solarized-orange}]{\#},
+#+LATEX_HEADER: moredelim = **[s][\color{solarized-cyan}]{<}{>},
+#+LATEX_HEADER: rulecolor=\color{black},
+#+LATEX_HEADER: literate={{\%d}}{{\textcolor{solarized-red}{\%d}}}2
+#+LATEX_HEADER:           {{\%2d}}{{\textcolor{solarized-red}{\%2d}}}3
+#+LATEX_HEADER:           {{\\n}}{{\textcolor{solarized-red}{\textbackslash{}n}}}2,
+#+LATEX_HEADER: }
 
 #+BEGIN_EXPORT latex
 % This is the title page
 \thispagestyle{empty} % No page number on the first page
 \begin{center}
-\begin{lmss}
+\begin{helvetica}
 {\huge\textbf{Software Quality}\par}
 {\huge\textbf{SOFE 3980U}\par}
   \vspace{20mm}
@@ -39,7 +67,7 @@
       \textbf{Zackarry Winn 10000000}\\
       \textbf{Logan McDonald 10000000}
   \end{large}
-\end{lmss}
+\end{helvetica}
 \end{center}
 \newpage
 \tableofcontents
@@ -83,7 +111,8 @@ that produces no resultant pleasure?"
 
 * Code Re-factoring/Re-designing
 Sample for testing formatting
-#+BEGIN_SRC c++
+#+ATTR_LATEX: :options language=cpp,numbers=none
+#+BEGIN_SRC C++
 class SearchAlgorithm
 {
    public:
