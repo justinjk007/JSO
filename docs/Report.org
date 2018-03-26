@@ -137,7 +137,7 @@ function declarations here again so that *JSO* can call his or her fitness funct
 using any other libraries for visualizing the optimization the user needs to include both of the
 libraries again in, say the main file. This means the code is jumping around everywhere and the
 programmer has to jump with it. We wanted to improve on this unmaintainable messy pattern. Using
-modern C++ such as =std::function=[fn:2] and =lambdas=[fn:3] we were able to do this easily. We also
+modern C++ such as =std::function= [fn:2] and =lambdas= [fn:3] we were able to do this easily. We also
 removed all the globals and added them as member variables so *C++*'s =RAII= can take care of the memory
 management instead of the user.
 
