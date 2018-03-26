@@ -21,6 +21,8 @@
 #+LATEX_HEADER: linkcolor=blue!70!white,
 #+LATEX_HEADER: urlcolor=blue!95!black
 #+LATEX_HEADER: }
+#+LATEX_HEADER: \usepackage{enumitem}
+#+LATEX_HEADER: \setlist[1]{itemsep=-10pt}
 #+LATEX_HEADER: \lstdefinelanguage{cpp}{
 #+LATEX_HEADER: language=C++,
 #+LATEX_HEADER: morekeywords={cerr,exit,string},
@@ -169,15 +171,19 @@ new re-design the user just has to write this.
 
 Say =rastrigin(double*,double*)= is defined, it can be optimized like this.
 #+ATTR_LATEX: :options language=cpp,caption="Non-member function optimization",numbers=left
-#+BEGIN_SRC c++
+#+BEGIN_SRC C++
 JSO::JSO algorithm(rastrigin, 2, -5.12, 5.12);
 algorithm.run();
 #+END_SRC
-
+- Here =rastrigin_func= is the name of the function.
+- =2= is the dimension of the problem.
+- =-5.12= is the minimum value of the population.
+- =-5.12= is the maximum value of the population.
+- The code will exit after maximum iterations or based on the exit criteria
 
 Say =Foo::sphere(double*,double*)= is defined, it can be optimized like this using a /lambda/
 #+ATTR_LATEX: :options language=cpp,caption="Member function optimization",numbers=left
-#+BEGIN_SRC c++
+#+BEGIN_SRC C++
 using namspace JSO;
 Foo obj;
 JSO algorithm([&obj](double* a, double* b) { obj.sphere(a, b); }, 2, -100, 100);
