@@ -64,10 +64,10 @@
       \text{, Final Project}\\
       \text{JSO, A differential Evolution library in C++}\\
       \vspace{25mm}
-      \textbf{George Zackarov 10000000}\\
+      \textbf{Georgy Zakharov 100588814}\\
       \textbf{Justin Kaipada 100590167}\\
-      \textbf{Logan McDonald 10000000}\\
-      \textbf{Zackarry Winn 10000000}
+      \textbf{Logan MacDonald 100579606}\\
+      \textbf{Zachary Winn 100557505}
   \end{large}
 \end{helvetica}
 \end{center}
