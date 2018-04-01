@@ -140,7 +140,7 @@ using any other libraries for visualizing the optimization the user needs to inc
 libraries again in, say the main file. This means the code is jumping around everywhere and the
 programmer has to jump with it. We wanted to improve on this unmaintainable messy pattern. Using
 modern C++ such as =std::function= [fn:2] and =lambdas= [fn:3] we were able to do this easily. We also
-removed all the globals and added them as member variables so *C++*'s =RAII= can take care of the memory
+removed all the globals and added them as member variables so *C++*'s =RAII= [fn:4]can take care of the memory
 management instead of the user.
 
 Previously the user has to write this much code for coupling and even more for complex softwares
@@ -195,6 +195,7 @@ management also stops potential memory leaks by the user.
 
 [fn:2] http://en.cppreference.com/w/cpp/utility/functional/function
 [fn:3] http://en.cppreference.com/w/cpp/language/lambda
+[fn:4] http://en.cppreference.com/w/cpp/language/raii
 
 * Implementation Challenges
 Most of the challenges came from the previous authors use of old and new *C* mixed with *C++*, some of
