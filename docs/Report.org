@@ -197,25 +197,20 @@ management also stops potential memory leaks by the user.
 [fn:3] http://en.cppreference.com/w/cpp/language/lambda
 
 * Implementation Challenges
-1914 translation by H. Rackham "On the other hand, we denounce with righteous indignation and
-dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded
-by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame
-belongs to those who fail in their duty through weakness of will, which is the same as saying
-through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a
-free hour, when our power of choice is untrammelled and when nothing prevents our being able to do
-what we like best, every pleasure is to be welcomed and every pain avoided. But in certain
-circumstances and owing to the claims of duty or the obligations of business it will frequently
-occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always
-holds in these matters to this principle of selection: he rejects pleasures to secure other greater
-pleasures, or else he endures pains to avoid worse pains."
+Most of the challenges came from the previous authors use of old and new *C* mixed with *C++*, some of
+them will where depreciated and would only with older version of compilers that works on only
+certain platforms. So we have to carefully find that and replace them with new standard features
+making sure the implementation is correct. The difficulty arose because the code is poorly commented
+and the variable names used where small and one-lettered that didn't explain its own purpose. We had
+to study the entire process and structure of the file before factoring it, hence taking up a lot of
+time of the project. The previous author didn't leave us with any unit-tests either, and because of
+the nature of the code, the randomness of the output made them hard to test as well.
+
 * Conclusion
-Section 1.10.33 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC "At vero eos et
-accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque
-corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
-sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem
-rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio
-cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est,
-omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus
-saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic
-tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut
-perferendis doloribus asperiores repellat."
+
+In conclusion, our work has led to a great understanding in maintaining the quality of a software
+being developed. We understood why unit testing and automation of the build process across different
+platforms can be good to software development and how it will affect the quality and integrity of
+the software being developed. The significance of our work lies in the difference we have made in
+the quality of the software entirely and how we transformed benchmarking code into a fully usable
+library.
