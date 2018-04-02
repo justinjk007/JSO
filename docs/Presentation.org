@@ -1,0 +1,13 @@
+#+TITLE: JSO, A differential evolution library.
+#+AUTHOR: Group 6
+#+REVEAL_THEME: solarized
+#+OPTIONS: reveal_slide_number:nil num:nil toc:nil
+#+REVEAL_MARGIN: 0.3
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_PLUGINS: (highlight)
+#+REVEAL_HIGHLIGHT_CSS: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css
+
+* What is JSO
+* dfkjdf
+* werr

@@ -5,7 +5,8 @@ GPATH
 GRTAGS
 GTAGS
 
-# Ignore tex, org-mode is everything
+# Ignore tex and html, org-mode is everything
+*.html
 *.tex
 *.pdf
 *.log
