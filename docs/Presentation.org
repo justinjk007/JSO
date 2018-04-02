@@ -9,5 +9,33 @@
 #+REVEAL_HIGHLIGHT_CSS: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css
 
 * What is JSO
-* dfkjdf
-* werr
+*JSO* is a differential evolution algorithm presented in the Congress on
+Evolutionary Computation(CEC) 2017. It is a single objective real parameter
+optimization algorithm written by the 3 main authors Janez Brest, Mirjam Sepesy
+Maučec and Borko Bošković, all working for the Faculty of Electrical Engineering
+and Computer Science, University of Maribor.
+
+* Before our redesign
+#+BEGIN_SRC C++
+g_problem_size        = 7; // dimension size.
+g_max_num_evaluations = g_problem_size * 10000;
+srand((unsigned)time(NULL));
+g_pop_size    = round(sqrt(g_p_size)*log(g_p_size) * 25);
+g_memory_size = 5;
+g_arc_rate    = 1;
+g_p_best_rate = 0.25;
+domain_min = 90;
+domain_max = 120;
+CalculateGap* fitness_algo = new CalculateGap();
+searchAlgorithm* algorithm     = new LSHADE();
+algorithm->fitness_algo_object = fitness_algo;
+algorithm->run();
+delete fitness_algo;
+delete algorithm;
+// The globals are never deleted :(
+#+END_SRC
+* After our redesign
+#+BEGIN_SRC C++
+JSO::JSO algorithm(rastrigin, 2, -5.12, 5.12);
+algorithm.run();
+#+END_SRC
