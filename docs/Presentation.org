@@ -51,7 +51,7 @@ algorithm.run();
  algorithm.run();
  #+END_SRC
 
-* For unit testing we used *Catch*
+* For unit testing we used Catch
 [[https://raw.githubusercontent.com/catchorg/Catch2/master/artwork/catch2-logo-small.png]]
 - Its a header only unit-testing library, hence very easy to use as a dependency
 - We didn't need any external data, we only needed to generate
@@ -75,14 +75,11 @@ TEST_CASE("Testing makeNewIndividual()")
 * We also added Continuous Integration
 [[./github.png]]
 
+https://github.com/justinjk007/JSO
+
 #+attr_html: :width 255px :height 255px
-#+CAPTION: Travis CI and Appveyor
 [[https://travis-ci.org/images/logos/TravisCI-Mascot-1.png]] [[https://www.appveyor.com/assets/img/appveyor-logo-256.png]]
 
-#+BEGIN_NOTES
-We are using Travis CI for linux and Mac OS continuous integration and
-Appveyor for Windows Continuous integration
-#+END_NOTES
 * Next Steps
  - Right now the library is using =rand()= and =time= to seed the random
    numbers in conjunction with =Cauchy= Distribution to get truly random numbers.

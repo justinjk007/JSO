@@ -26,12 +26,12 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h1 class="title">JSO, A differential evolution library.</h1><h2 class="author">Group 6</h2><p class="date">Created: 2018-04-03 Tue 09:28</p>
+<section id="sec-title-slide"><h1 class="title">JSO, A differential evolution library.</h1><h2 class="author">Group 6</h2><p class="date">Created: 2018-04-03 Tue 13:03</p>
 </section>
 
 <section>
-<section id="slide-org91bd7c9">
-<h2 id="org91bd7c9">What is JSO</h2>
+<section id="slide-org6dab1ee">
+<h2 id="org6dab1ee">What is JSO</h2>
 <p>
 <b>JSO</b> is a differential evolution algorithm presented in the Congress on
 Evolutionary Computation(CEC) 2017. It is a single objective real parameter
@@ -43,8 +43,8 @@ and Computer Science, University of Maribor.
 </section>
 </section>
 <section>
-<section id="slide-org83be0f1">
-<h2 id="org83be0f1">Before our redesign</h2>
+<section id="slide-orgeab5cb6">
+<h2 id="orgeab5cb6">Before our redesign</h2>
 <div class="org-src-container">
 
 <pre><code class="C++" >g_problem_size        = 7; // dimension size.
@@ -68,8 +68,8 @@ delete algorithm;
 </section>
 </section>
 <section>
-<section id="slide-org1388a1d">
-<h2 id="org1388a1d">After our redesign</h2>
+<section id="slide-org5fa0b50">
+<h2 id="org5fa0b50">After our redesign</h2>
 <div class="org-src-container">
 
 <pre><code class="C++" >JSO::JSO algorithm(rastrigin, 2, -5.12, 5.12);
@@ -80,8 +80,8 @@ algorithm.run();
 </section>
 </section>
 <section>
-<section id="slide-orgdad521c">
-<h2 id="orgdad521c">And to use a member function</h2>
+<section id="slide-org53bbdbf">
+<h2 id="org53bbdbf">And to use a member function</h2>
 <p>
 We can use a <b>lambda</b> like this
 </p>
@@ -97,8 +97,8 @@ algorithm.run();
 </section>
 </section>
 <section>
-<section id="slide-org812d486">
-<h2 id="org812d486">For unit testing we used <b>Catch</b></h2>
+<section id="slide-org8b690b0">
+<h2 id="org8b690b0">For unit testing we used Catch</h2>
 
 <div class="figure">
 <p><img src="https://raw.githubusercontent.com/catchorg/Catch2/master/artwork/catch2-logo-small.png" alt="catch2-logo-small.png" />
@@ -115,8 +115,8 @@ domain of population</li>
 </section>
 </section>
 <section>
-<section id="slide-orgf9a93dc">
-<h2 id="orgf9a93dc">For example, a simple unit test will look like this</h2>
+<section id="slide-orgede7f80">
+<h2 id="orgede7f80">For example, a simple unit test will look like this</h2>
 <div class="org-src-container">
 
 <pre><code class="C++" >TEST_CASE("Testing makeNewIndividual()")
@@ -135,30 +135,27 @@ domain of population</li>
 </section>
 </section>
 <section>
-<section id="slide-org47b2947">
-<h2 id="org47b2947">We also added Continuous Integration</h2>
+<section id="slide-org98185dd">
+<h2 id="org98185dd">We also added Continuous Integration</h2>
 
 <div class="figure">
 <p><img src="./github.png" alt="github.png" />
 </p>
 </div>
 
+<p>
+<a href="https://github.com/justinjk007/JSO">https://github.com/justinjk007/JSO</a>
+</p>
+
 <p width="255px" height="255px">
 <img src="https://travis-ci.org/images/logos/TravisCI-Mascot-1.png" alt="TravisCI-Mascot-1.png" width="255px" height="255px" /> <img src="https://www.appveyor.com/assets/img/appveyor-logo-256.png" alt="appveyor-logo-256.png" />
 </p>
 
-<aside class="notes">
-<p>
-We are using Travis CI for linux and Mac OS continuous integration and
-Appveyor for Windows Continuous integration
-</p>
-
-</aside>
 </section>
 </section>
 <section>
-<section id="slide-org970084d">
-<h2 id="org970084d">Next Steps</h2>
+<section id="slide-org325c6a6">
+<h2 id="org325c6a6">Next Steps</h2>
 <ul>
 <li>Right now the library is using <code>rand()</code> and <code>time</code> to seed the random
 numbers in conjunction with <code>Cauchy</code> Distribution to get truly random numbers.</li>
