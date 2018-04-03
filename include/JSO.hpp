@@ -116,11 +116,9 @@ void SearchAlgorithm::setBestSolution(const vector<Individual>& pop, const vecto
 Individual SearchAlgorithm::makeNewIndividual()
 {
     Individual individual = (double*)malloc(sizeof(double) * problem_size);
-
     for (int i = 0; i < problem_size; i++) {
         individual[i] = ((max_region - min_region) * randDouble()) + min_region;
     }
-
     return individual;
 }
 
@@ -136,7 +134,6 @@ void SearchAlgorithm::modifySolutionWithParentMedium(Individual child, Individua
     int l_problem_size  = problem_size;
     double l_min_region = min_region;
     double l_max_region = max_region;
-
     for (int j = 0; j < l_problem_size; j++) {
         if (child[j] < l_min_region) {
             child[j] = (l_min_region + parent[j]) / 2.0;
@@ -180,24 +177,19 @@ void SearchAlgorithm::sortIndexWithQuickSort(T array[], int first, int last, int
     int j        = last;
     T temp_var   = 0;
     int temp_num = 0;
-
     while (true) {
         while (array[i] < x) i++;
         while (x < array[j]) j--;
         if (i >= j) break;
-
         temp_var = array[i];
         array[i] = array[j];
         array[j] = temp_var;
-
         temp_num = index[i];
         index[i] = index[j];
         index[j] = temp_num;
-
         i++;
         j--;
     }
-
     if (first < (i - 1)) sortIndexWithQuickSort(array, first, i - 1, index);
     if ((j + 1) < last) sortIndexWithQuickSort(array, j + 1, last, index);
 }
@@ -205,26 +197,17 @@ void SearchAlgorithm::sortIndexWithQuickSort(T array[], int first, int last, int
 Fitness JSO::run()
 {
     std::cout << std::scientific << std::setprecision(8);
-
-    // cout << pop_size << endl;
-    // cout << arc_size << endl;
-    // cout << p_best_rate << endl;
-    // cout << memory_size << endl;
-
     vector<Individual> pop;
     vector<Fitness> fitness(pop_size, 0);
     vector<Individual> children;
     vector<Fitness> children_fitness(pop_size, 0);
-
     // initialize population
     for (int i = 0; i < pop_size; i++) {
         pop.push_back(makeNewIndividual());
         children.push_back((double*)malloc(sizeof(double) * problem_size));
     }
-
     // evaluate the initial population's fitness values
     evaluatePopulation(pop, fitness);
-
     Individual bsf_solution = (double*)malloc(sizeof(double) * problem_size);
     Fitness bsf_fitness;
     unsigned int nfes = 0;
@@ -232,27 +215,19 @@ Fitness JSO::run()
     if ((fitness[0] - optimum) < epsilon) fitness[0] = optimum;
     bsf_fitness = fitness[0];
     for (int j = 0; j < problem_size; j++) bsf_solution[j] = pop[0][j];
-    /////////////////////////////////////////////////////////////////////////
+    // Most important part of the function
     for (int i = 0; i < pop_size; i++) {
         nfes++;
-
         if ((fitness[i] - optimum) < epsilon) fitness[i] = optimum;
-
         if (fitness[i] < bsf_fitness) {
             bsf_fitness = fitness[i];
             for (int j = 0; j < problem_size; j++) bsf_solution[j] = pop[i][j];
         }
-
-        // if (nfes % 1000 == 0) {
-        //   //      cout << nfes << " " << bsf_fitness - optimum << endl;
-        //   cout << bsf_fitness - optimum << endl;
-        // }
-
         if (nfes >= max_num_evaluations) break;
     }
-    ////////////////////////////////////////////////////////////////////////////
+    // Most important part of the function
 
-    // for external archive
+    // For external archive
     int arc_ind_count = 0;
     int random_selected_arc_ind;
     vector<Individual> archive;
@@ -314,7 +289,6 @@ Fitness JSO::run()
             }
 
             // generate CR_i and repair its value
-            // if (mu_cr == -1) {
             if (mu_cr < 0) {           // JANEZ
                 pop_cr[target] = 0.0;  // LSHADE 0
             } else {
@@ -324,10 +298,6 @@ Fitness JSO::run()
                 else if (pop_cr[target] < 0)
                     pop_cr[target] = 0;
             }
-            //   if (nfes< 0.25*max_num_evaluations && pop_cr[target] < 0.5) pop_cr[target] = 0.5;
-            //   // iL-SHADE
-            //   if (nfes< 0.50*max_num_evaluations && pop_cr[target] < 0.25) pop_cr[target] = 0.25;
-            //   // iL-SHADE
             if (nfes < 0.25 * max_num_evaluations && pop_cr[target] < 0.7)
                 pop_cr[target] = 0.7;  // jSO
             if (nfes < 0.50 * max_num_evaluations && pop_cr[target] < 0.6)
@@ -339,16 +309,9 @@ Fitness JSO::run()
             } while (pop_sf[target] <= 0.0);
 
             if (pop_sf[target] > 1) pop_sf[target] = 1.0;
-            //  if (nfes< 0.25*max_num_evaluations && pop_sf[target] > 0.8) pop_sf[target] = 0.8;
-            //  // iL-SHADE
-            //  if (nfes< 0.50*max_num_evaluations && pop_sf[target] > 0.9) pop_sf[target] = 0.9;
-            //  // iL-SHADE
             if (nfes < 0.6 * max_num_evaluations && pop_sf[target] > 0.7)
                 pop_sf[target] = 0.7;  // jSO
 
-            // //p-best individual is randomly selected from the top pop_size *  p_i members
-            //      p_best_ind = sorted_array[rand() % p_num]; // L-SHADE
-            // p-best individual is randomly selected from the top pop_size *  p_i members
             do {
                 p_best_ind = sorted_array[rand() % p_num];
             } while (nfes < 0.50 * max_num_evaluations && p_best_ind == target);  // iL-SHADE
@@ -356,15 +319,11 @@ Fitness JSO::run()
             operateCurrentToPBest1BinWithArchive(pop, &children[target][0], target, p_best_ind,
                                                  pop_sf[target], pop_cr[target], archive,
                                                  arc_ind_count, nfes);
-
-            // print info
-            // cout << nfes <<" "<< target <<" "<< pop_sf[target] <<" "<< pop_cr[target] << endl;
         }
 
         // evaluate the children's fitness values
         evaluatePopulation(children, children_fitness);
 
-        /////////////////////////////////////////////////////////////////////////
         // update the bsf-solution and check the current number of fitness evaluations
         // if the current number of fitness evaluations over the max number of fitness evaluations,
         // the search is terminated
@@ -384,7 +343,6 @@ Fitness JSO::run()
             }
             if (nfes >= max_num_evaluations) break;
         }
-        ////////////////////////////////////////////////////////////////////////////
 
         // generation alternation
         for (int i = 0; i < pop_size; i++) {
@@ -394,8 +352,6 @@ Fitness JSO::run()
             } else if (children_fitness[i] < fitness[i]) {
                 dif_fitness.push_back(fabs(fitness[i] - children_fitness[i]));
                 fitness[i] = children_fitness[i];
-                //  	for (int j = 0; j < problem_size; j ++) pop[i][j] = children[i][j];   //
-                //  iL-SHADE
 
                 // successful parameters are preserved in S_F and S_CR
                 success_sf.push_back(pop_sf[i]);
@@ -416,7 +372,7 @@ Fitness JSO::run()
                             archive[random_selected_arc_ind][j] = pop[i][j];
                     }
                 }
-                for (int j = 0; j < problem_size; j++) pop[i][j] = children[i][j];  // jSO
+                for (int j = 0; j < problem_size; j++) pop[i][j] = children[i][j];
             }
         }
 
@@ -458,12 +414,6 @@ Fitness JSO::run()
             memory_sf[memory_pos] = (memory_sf[memory_pos] + old_sf) / 2.0;
             memory_cr[memory_pos] = (memory_cr[memory_pos] + old_cr) / 2.0;
 
-            // if (memory_cr[memory_pos] < 0) {
-            //   cout << " nfes: " << nfes ;
-            //   cout << " memory_sf[memory_pos] = "<< memory_sf[memory_pos] << "
-            //   memory_cr[memory_pos] = " << memory_cr[memory_pos];
-            //   cout << " old_sf = "<< old_sf << " old_cr = " << old_cr<< endl;
-            //}
             // increment the counter
             memory_pos++;
             if (memory_pos >= memory_size) memory_pos = 0;
@@ -499,20 +449,19 @@ Fitness JSO::run()
     free(pop_sf);
     free(pop_cr);
     for (int i = 0; i < pop_size; i++) {
-        free(pop[i]);       //.clear();  // JANEZ
-        free(children[i]);  //.clear();  // JANEZ
+        free(pop[i]);
+        free(children[i]);
     }
-    pop.clear();       // JANEZ
-    children.clear();  // JANEZ
+    pop.clear();
+    children.clear();
     fitness.clear();
     children_fitness.clear();
     free(bsf_solution);
     for (int i = 0; i < arc_size; i++) free(archive[i]);
     archive.clear();
     memory_sf.clear();
-    // sorted_array.clear();
     free(sorted_array);
-    free(temp_fit);  //.clear();
+    free(temp_fit);
 
     return bsf_fitness - optimum;
 }

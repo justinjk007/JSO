@@ -1,5 +1,8 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main()
 #include "catch.hpp"
+#include <array>
+#include <vector>
+#include <algorithm>  // std::copy
 #define private public    // For unit testing private methods
 #define protected public  // For unit testing protected methods
 #include "../include/JSO.hpp"
@@ -54,4 +57,17 @@ TEST_CASE("Testing makeNewIndividual()")
 	REQUIRE(sizeof(calc[i]) == 8);
 	REQUIRE(cond == true);
     }
+}
+
+TEST_CASE("Testing sortIndexWithQuickSort()")
+{
+    JSO::JSO algorithm(rastrigin_func, 2, -5.12, 5.12);
+    double array[10] = {1,2.4,3.4,0,0.2,2.3,5.6,8.0,1.9,10};
+    std::array<double,10> sorted = {0,0.2,1,1.9,2.3,2.4,3.4,5.6,8,10};
+    std::array<double,10> cpp_array;
+    int index[10] = {0};
+
+    algorithm.sortIndexWithQuickSort(array, 0, 9, index );
+    std::copy(std::begin(array), std::end(array), std::begin(cpp_array));
+    REQUIRE(cpp_array == sorted);
 }
