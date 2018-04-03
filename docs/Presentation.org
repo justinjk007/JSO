@@ -74,10 +74,18 @@ TEST_CASE("Testing makeNewIndividual()")
 #+END_SRC
 * We also added Continuous Integration
 [[./github.png]]
+
 #+attr_html: :width 255px :height 255px
+#+CAPTION: Travis CI and Appveyor
 [[https://travis-ci.org/images/logos/TravisCI-Mascot-1.png]] [[https://www.appveyor.com/assets/img/appveyor-logo-256.png]]
 
 #+BEGIN_NOTES
 We are using Travis CI for linux and Mac OS continuous integration and
 Appveyor for Windows Continuous integration
 #+END_NOTES
+* Next Steps
+ - Right now the library is using =rand()= and =time= to seed the random
+   numbers in conjunction with =Cauchy= Distribution to get truly random numbers.
+ - We want to change that =C++11= 's Mersenne twister engine in =<random>= .
+ - We also want to slightly change the main =run()= so that it returns
+   back some sort output to say that one iteration was done.

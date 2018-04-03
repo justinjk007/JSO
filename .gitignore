@@ -6,7 +6,6 @@ GRTAGS
 GTAGS
 
 # Ignore tex and html, org-mode is everything
-*.html
 *.tex
 *.pdf
 *.log

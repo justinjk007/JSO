@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>JSO, A differential evolution library.</title>
+<meta name="author" content="(Group 6)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.5.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.5.0/css/theme/solarized.css" id="theme"/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.5.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">JSO, A differential evolution library.</h1><h2 class="author">Group 6</h2><p class="date">Created: 2018-04-03 Tue 09:28</p>
+</section>
+
+<section>
+<section id="slide-org91bd7c9">
+<h2 id="org91bd7c9">What is JSO</h2>
+<p>
+<b>JSO</b> is a differential evolution algorithm presented in the Congress on
+Evolutionary Computation(CEC) 2017. It is a single objective real parameter
+optimization algorithm written by the 3 main authors Janez Brest, Mirjam Sepesy
+Maučec and Borko Bošković, all working for the Faculty of Electrical Engineering
+and Computer Science, University of Maribor.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org83be0f1">
+<h2 id="org83be0f1">Before our redesign</h2>
+<div class="org-src-container">
+
+<pre><code class="C++" >g_problem_size        = 7; // dimension size.
+g_max_num_evaluations = g_problem_size * 10000;
+srand((unsigned)time(NULL));
+g_pop_size    = round(sqrt(g_p_size)*log(g_p_size) * 25);
+g_memory_size = 5;
+g_arc_rate    = 1;
+g_p_best_rate = 0.25;
+domain_min = 90;
+domain_max = 120;
+Foo* fitness_algo = new Foo();
+searchAlgorithm* algorithm     = new LSHADE();
+algorithm->fitness_algo_object = fitness_algo;
+algorithm->run();
+delete fitness_algo;
+delete algorithm;
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org1388a1d">
+<h2 id="org1388a1d">After our redesign</h2>
+<div class="org-src-container">
+
+<pre><code class="C++" >JSO::JSO algorithm(rastrigin, 2, -5.12, 5.12);
+algorithm.run();
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdad521c">
+<h2 id="orgdad521c">And to use a member function</h2>
+<p>
+We can use a <b>lambda</b> like this
+</p>
+<div class="org-src-container">
+
+<pre><code class="C++" >using namspace JSO;
+Foo obj;
+JSO algorithm([&obj](double* a, double* b) { obj.sphere(a, b); }, 2, -100, 100);
+algorithm.run();
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org812d486">
+<h2 id="org812d486">For unit testing we used <b>Catch</b></h2>
+
+<div class="figure">
+<p><img src="https://raw.githubusercontent.com/catchorg/Catch2/master/artwork/catch2-logo-small.png" alt="catch2-logo-small.png" />
+</p>
+</div>
+<ul>
+<li>Its a header only unit-testing library, hence very easy to use as a dependency</li>
+<li>We didn't need any external data, we only needed to generate
+individual candidates for evolution and make sure they are in our
+domain of population</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf9a93dc">
+<h2 id="orgf9a93dc">For example, a simple unit test will look like this</h2>
+<div class="org-src-container">
+
+<pre><code class="C++" >TEST_CASE("Testing makeNewIndividual()")
+{
+    JSO::JSO algorithm(rastrigin_func, 2, -5.12, 5.12);
+    double* calc[20] = {0};
+    for (int i = 0; i < 20; ++i) calc[i] = algorithm.makeNewIndividual();
+    for (int i = 0; i < 20; ++i) {
+	bool cond = *calc[0] <= 5.12 && *calc[1] >= -5.12;
+	REQUIRE(sizeof(calc) == 8*20);
+	REQUIRE(cond == true);
+    }
+}
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org47b2947">
+<h2 id="org47b2947">We also added Continuous Integration</h2>
+
+<div class="figure">
+<p><img src="./github.png" alt="github.png" />
+</p>
+</div>
+
+<p width="255px" height="255px">
+<img src="https://travis-ci.org/images/logos/TravisCI-Mascot-1.png" alt="TravisCI-Mascot-1.png" width="255px" height="255px" /> <img src="https://www.appveyor.com/assets/img/appveyor-logo-256.png" alt="appveyor-logo-256.png" />
+</p>
+
+<aside class="notes">
+<p>
+We are using Travis CI for linux and Mac OS continuous integration and
+Appveyor for Windows Continuous integration
+</p>
+
+</aside>
+</section>
+</section>
+<section>
+<section id="slide-org970084d">
+<h2 id="org970084d">Next Steps</h2>
+<ul>
+<li>Right now the library is using <code>rand()</code> and <code>time</code> to seed the random
+numbers in conjunction with <code>Cauchy</code> Distribution to get truly random numbers.</li>
+<li>We want to change that <code>C++11</code> 's Mersenne twister engine in <code>&lt;random&gt;</code> .</li>
+<li>We also want to slightly change the main <code>run()</code> so that it returns
+back some sort output to say that one iteration was done.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.5.0/lib/js/head.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.5.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: false,
+rollingLinks: false,
+keyboard: true,
+overview: true,
+width: 1300,
+height: 1200,
+margin: 0.00,
+minScale: 1.00,
+maxScale: 1.00,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.5.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.5.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>
