@@ -1,4 +1,6 @@
 * JSO
+[[https://travis-ci.org/justinjk007/JSO][https://travis-ci.org/justinjk007/JSO.svg?branch=master#.svg]]
+[[https://ci.appveyor.com/project/justinjk007/jso][https://ci.appveyor.com/api/projects/status/kuv6oxtq8hn6hr2t?svg=true3.svg]]
 [[https://www.gnu.org/licenses/gpl-3.0][https://img.shields.io/badge/License-GPLv3-blue.svg]]
 [[https://isocpp.org/][https://img.shields.io/badge/language-C++-blue.svg]]
 [[https://en.wikipedia.org/wiki/C%2B%2B11][https://img.shields.io/badge/C%2B%2B-11-blue.svg]]
