@@ -5,9 +5,9 @@
 #+REVEAL_MARGIN: 0.0
 #+REVEAL_MIN_SCALE: 1.0
 #+REVEAL_MAX_SCALE: 1.0
-#+OPTIONS: reveal_width:1300 reveal_height:900
+#+OPTIONS: reveal_width:1300 reveal_height:1200
 #+REVEAL_THEME: solarized
-#+REVEAL_PLUGINS: (highlight)
+#+REVEAL_PLUGINS: (highlight notes)
 #+REVEAL_HIGHLIGHT_CSS: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css
 
 * What is JSO
@@ -35,6 +35,7 @@ algorithm->run();
 delete fitness_algo;
 delete algorithm;
 #+END_SRC
+
 * After our redesign
 #+BEGIN_SRC C++
 JSO::JSO algorithm(rastrigin, 2, -5.12, 5.12);
@@ -43,10 +44,40 @@ algorithm.run();
 
 * And to use a member function
  We can use a *lambda* like this
-
  #+BEGIN_SRC C++
  using namspace JSO;
  Foo obj;
  JSO algorithm([&obj](double* a, double* b) { obj.sphere(a, b); }, 2, -100, 100);
  algorithm.run();
  #+END_SRC
+
+* For unit testing we used *Catch*
+[[https://raw.githubusercontent.com/catchorg/Catch2/master/artwork/catch2-logo-small.png]]
+- Its a header only unit-testing library, hence very easy to use as a dependency
+- We didn't need any external data, we only needed to generate
+  individual candidates for evolution and make sure they are in our
+  domain of population
+
+* For example, a simple unit test will look like this
+#+BEGIN_SRC C++
+TEST_CASE("Testing makeNewIndividual()")
+{
+    JSO::JSO algorithm(rastrigin_func, 2, -5.12, 5.12);
+    double* calc[20] = {0};
+    for (int i = 0; i < 20; ++i) calc[i] = algorithm.makeNewIndividual();
+    for (int i = 0; i < 20; ++i) {
+	bool cond = *calc[0] <= 5.12 && *calc[1] >= -5.12;
+	REQUIRE(sizeof(calc) == 8*20);
+	REQUIRE(cond == true);
+    }
+}
+#+END_SRC
+* We also added Continuous Integration
+[[./github.png]]
+#+attr_html: :width 255px :height 255px
+[[https://travis-ci.org/images/logos/TravisCI-Mascot-1.png]] [[https://www.appveyor.com/assets/img/appveyor-logo-256.png]]
+
+#+BEGIN_NOTES
+We are using Travis CI for linux and Mac OS continuous integration and
+Appveyor for Windows Continuous integration
+#+END_NOTES

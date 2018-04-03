@@ -12,7 +12,7 @@ TEST_CASE("Integration Test with classless fucntion")
 {
     srand((unsigned)time(NULL));
     JSO::JSO algorithm(rastrigin_func, 2, -5.12, 5.12);
-    // algorithm.run();
+    algorithm.run();
 }
 
 TEST_CASE("Function pointer test with member function")
@@ -33,7 +33,7 @@ TEST_CASE("Integration test case with member function")
     TestFunction sphere;
     JSO::JSO algorithm([&sphere](double* p1, double* p2) { sphere.sphere_func(p1, p2); }, 2, -100,
                        100);  // lambda blackmagic
-    // algorithm.run();
+    algorithm.run();
 }
 
 TEST_CASE("Testing randDouble()")
@@ -54,7 +54,7 @@ TEST_CASE("Testing makeNewIndividual()")
     for (int i = 0; i < 5; ++i) calc[i] = algorithm.makeNewIndividual();
     for (int i = 0; i < 5; ++i) {
 	bool cond = *calc[0] <= 5.12 && *calc[1] >= -5.12;
-	REQUIRE(sizeof(calc[i]) == 8);
+	REQUIRE(sizeof(calc) == 8*5);
 	REQUIRE(cond == true);
     }
 }
