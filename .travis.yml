@@ -9,7 +9,6 @@ addons:
  apt:
   sources:
    - ubuntu-toolchain-r-test
-   - sourceline: 'ppa:beineri/opt-qt592-trusty'
   packages:
    - g++-5
 
