@@ -1,29 +1,14 @@
 version: '{build}'
 
+image:
+  - Visual Studio 2013
+  - Visual Studio 2015
+  - Visual Studio 2017
+
 test: off
 
 clone_folder: c:\Repos\source
 
-image:
-  - Visual Studio 2013
-build_script:
-  - cd C:\Repos\source\
-  - mkdir build
-  - cd build
-  - cmake C:\Repos\source -G "Visual Studio 13 Win64"
-  - cmake --build . --config "Release"
-
-image:
-  - Visual Studio 2015
-build_script:
-  - cd C:\Repos\source\
-  - mkdir build
-  - cd build
-  - cmake C:\Repos\source -G "Visual Studio 14 Win64"
-  - cmake --build . --config "Release"
-
-image:
-  - Visual Studio 2017
 build_script:
   - cd C:\Repos\source\
   - mkdir build
