@@ -9,9 +9,18 @@ test: off
 
 clone_folder: c:\Repos\source
 
+environment:
+  matrix:
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+    Compiler: Visual Studio 13 Win64
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    Compiler: Visual Studio 14 Win64
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    Compiler: Visual Studio 15 Win64
+
 build_script:
   - cd C:\Repos\source\
   - mkdir build
   - cd build
-  - cmake C:\Repos\source -G "Visual Studio 15 Win64"
+  - cmake C:\Repos\source -G Compiler
   - cmake --build . --config "Release"
