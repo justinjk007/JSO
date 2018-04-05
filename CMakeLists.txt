@@ -20,11 +20,7 @@ add_executable(run_tests tests/run_tests.cpp tests/integration_tests.cpp)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 if (CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_BUILD_TYPE Debug)
-  set_target_properties(run_tests
-    PROPERTIES
-    COMPILE_FLAGS "-ftest-coverage -fprofile-arcs"
-    LINK_FLAGS    "-lgcov --coverage"
-    )
+  add_compile_options(--coverage -O0)
   option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" OFF)
   if (ENABLE_COVERAGE)
     message(STATUS "Enabling coverage")
