@@ -11,20 +11,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if (MSVC)
   add_compile_options(/MP /Gm- /W4)
 else()
-  add_compile_options(-Wall -Wextra -Wpedantic -g -O0)
+  add_compile_options(-Wall -Wextra -Wpedantic -g)
 endif(MSVC)
 
-add_executable(run_tests tests/run_tests.cpp tests/integration_tests.cpp)
-
 # Add source code coverage option
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 if (CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_BUILD_TYPE Debug)
-  add_compile_options(--coverage -O0)
   option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" OFF)
   if (ENABLE_COVERAGE)
     message(STATUS "Enabling coverage")
-    include(CodeCoverage)
-    setup_target_for_coverage(NAME ${PROJECT_NAME}_coverage EXECUTABLE run_tests -j 4 DEPENDENCIES run_tests)
+    add_compile_options(--coverage -O0) # -O0 mean zero optimization
   endif()
 endif()
+
+add_executable(run_tests tests/run_tests.cpp tests/integration_tests.cpp)
