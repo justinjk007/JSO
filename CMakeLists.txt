@@ -14,14 +14,14 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic -g)
 endif(MSVC)
 
+add_executable(run_tests tests/run_tests.cpp tests/integration_tests.cpp)
+
 # Add source code coverage option
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 if (CMAKE_COMPILER_IS_GNUCXX)
   option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" OFF)
   if (ENABLE_COVERAGE)
     include(CodeCoverage)
-    setup_target_for_coverage(${PROJECT_NAME}_coverage ${PROJECT_TEST_NAME} coverage)
+    setup_target_for_coverage(${PROJECT_NAME}_coverage run_tests coverage)
   endif()
 endif()
-
-add_executable(run_tests tests/run_tests.cpp tests/integration_tests.cpp)
