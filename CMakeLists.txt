@@ -14,10 +14,13 @@ else()
   add_compile_options(-Wall -Wextra -Wpedantic -g)
 endif(MSVC)
 
-if (CMAKE_COMPILER_IS_GNUCC)
+# Add source code coverage option
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+if (CMAKE_COMPILER_IS_GNUCXX)
   option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" OFF)
   if (ENABLE_COVERAGE)
-    add_compile_options(-fprofile-arcs -ftest-coverage)
+    include(CodeCoverage)
+    setup_target_for_coverage(${PROJECT_NAME}_coverage ${PROJECT_TEST_NAME} coverage)
   endif()
 endif()
 
