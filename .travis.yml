@@ -15,6 +15,8 @@ addons:
 script:
  - mkdir build
  - cd build
- - CXX=/usr/bin/g++-5 CC=/usr/bin/gcc-5 cmake .. -D ENABLE_COVERAGE=ON
+ - CXX=/usr/bin/g++-5 CC=/usr/bin/gcc-5 cmake -D ENABLE_COVERAGE=ON ..
  - cmake --build . -- -j4
+
+after_success:
  - bash <(curl -s https://codecov.io/bash)
