@@ -17,7 +17,7 @@ endif(MSVC)
 if (CMAKE_COMPILER_IS_GNUCC)
   option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" OFF)
   if (ENABLE_COVERAGE)
-    add_compile_options(--coverage -O0)
+    add_compile_options(-fprofile-arcs -ftest-coverage)
   endif()
 endif()
 
