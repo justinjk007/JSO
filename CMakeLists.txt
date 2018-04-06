@@ -24,3 +24,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 add_executable(run_tests tests/run_tests.cpp tests/integration_tests.cpp)
+
+# Add testing using ctest for automation
+enable_testing()
+add_test(testing run_tests)
