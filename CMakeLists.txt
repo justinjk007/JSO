@@ -26,5 +26,5 @@ endif()
 add_executable(run_tests tests/run_tests.cpp tests/integration_tests.cpp)
 
 # Add testing using ctest for automation
-enable_testing()
-add_test(c_test_run_tests run_tests)
+# enable_testing()
+# add_test(c_test_run_tests run_tests)
