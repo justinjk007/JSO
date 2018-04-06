@@ -63,6 +63,7 @@
       \textbf{Group 6}
       \text{, Final Project}\\
       \text{JSO, A differential Evolution library in C++}\\
+      \url{https://github.com/justinjk007/JSO}\\
       \vspace{25mm}
       \textbf{Georgy Zakharov 100588814}\\
       \textbf{Justin Kaipada 100590167}\\
