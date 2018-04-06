@@ -16,7 +16,7 @@ endif(MSVC)
 
 # Add source code coverage option
 if (CMAKE_COMPILER_IS_GNUCXX)
-  option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" OFF)
+  option(ENABLE_COVERAGE "Enable coverage reporting for gcc" OFF)
   if (ENABLE_COVERAGE)
     message(STATUS "Enabling coverage")
     add_compile_options(--coverage -O0) # -O0 mean zero optimization
