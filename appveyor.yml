@@ -3,7 +3,7 @@ version: '{build}'
 image:
   - Visual Studio 2017
 
-test: off
+test: on
 
 clone_folder: c:\Repos\source
 
@@ -13,3 +13,6 @@ build_script:
   - cd build
   - cmake C:\Repos\source -G "Visual Studio 15 Win64"
   - cmake --build . --config "Release"
+
+test_script:
+  - ctest -C Release
