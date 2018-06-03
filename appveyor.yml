@@ -20,6 +20,7 @@ build_script:
   - cd C:\Repos\source\
   - mkdir build
   - cd build
+  - cmake --version
   - cmake C:\Repos\source -G "%compiler%%arch%"
   - cmake --build . --config "Release"
 
