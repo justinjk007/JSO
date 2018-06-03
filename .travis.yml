@@ -5,21 +5,30 @@ language: cpp
 notifications:
  email: false
 
+os:
+ - linux
+ - osx
+
+compiler:
+ - gcc
+ - clang
+
 addons:
  apt:
   sources:
    - ubuntu-toolchain-r-test
   packages:
    - g++-5
-   - lcov
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_COMPILER_NAME" == "gcc"]] ; then  CXX=/usr/bin/g++-5 CC=/usr/bin/gcc-5 ; fi
 
 script:
  - mkdir build
  - cd build
  - cmake --version
- - CXX=/usr/bin/g++-5 CC=/usr/bin/gcc-5 cmake ..
+ - cmake ..
  - cmake --build . -- -j4
 
 after_success:
  - ctest -j4
- - bash <(curl -s https://codecov.io/bash) -x /usr/bin/gcov-5
