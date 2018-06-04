@@ -21,8 +21,8 @@ addons:
    - g++-5
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CC" == "gcc"]; then CC=/usr/bin/gcc-5 && CXX=/usr/bin/g++-5 ; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ] && [ "$CC" == "gcc"]; then CC=gcc-4.9 && CXX=g++-4.9 ; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" && "$CC" == "gcc"]; then CC=/usr/bin/gcc-5 && CXX=/usr/bin/g++-5 ; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" && "$CC" == "gcc"]; then CC=gcc-4.9 && CXX=g++-4.9 ; fi
   # TODO Use all availble versions of gcc and clang on osx and linux: https://docs.travis-ci.com/user/languages/c/#GCC-on-OS-X
 
 script:
