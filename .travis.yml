@@ -26,6 +26,7 @@ before_install:
   # TODO Use all availble versions of gcc and clang on osx and linux: https://docs.travis-ci.com/user/languages/c/#GCC-on-OS-X
 
 script:
+ - if [ "$CC" == "gcc"]; then gcc --version ; fi
  - mkdir build
  - cd build
  - cmake --version
