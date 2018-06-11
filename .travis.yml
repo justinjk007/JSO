@@ -70,7 +70,6 @@ matrix:
             - clang-5.0
       env:
         - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
-    # Clang 4.9
     - os: osx
       osx_image: xcode8
       env:
@@ -82,7 +81,7 @@ matrix:
     - os: osx
       osx_image: xcode9.3
       env:
-        - MATRIX_EVAL="brew update && (brew install gcc@7 || brew link --overwrite gcc@7) && softwareupdate --install xcode-select &&  CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="brew update && (brew outdated gcc7 || brew upgrade gcc7) &&  CC=gcc-7 && CXX=g++-7"
 
 before_install:
   - eval "${MATRIX_EVAL}"
